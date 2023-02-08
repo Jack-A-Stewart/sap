@@ -2,10 +2,10 @@ package nl.codegorilla.sap.model;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-public class Student implements Serializable {
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
@@ -19,15 +19,19 @@ public class Student implements Serializable {
 
     private Status status;
 
+    @ManyToMany
+    private Set<Course> courses;
+
     public Student() {
     }
 
-    public Student(Long id, String firstName, String lastName, String email, Status status) {
+    public Student(Long id, String firstName, String lastName, String email, Status status, Set<Course> courses) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.status = status;
+        this.courses = courses;
     }
 
     public Long getId() {
@@ -68,6 +72,14 @@ public class Student implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 
     @Override
