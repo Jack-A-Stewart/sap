@@ -16,4 +16,8 @@ public class IsGraduatedController {
     public IsGraduatedController(IsGraduatedService isGraduatedService) {
         this.isGraduatedService = isGraduatedService;
     }
+
+
+
+
 }
