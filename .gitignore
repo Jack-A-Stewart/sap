@@ -1,0 +1,3 @@
+# Never commit a db
+*.db
+target

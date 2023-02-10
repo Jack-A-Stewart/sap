@@ -2,8 +2,6 @@ package nl.codegorilla.sap.model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 @Entity
 public class Course {
 
@@ -14,16 +12,13 @@ public class Course {
 
     private String name;
 
-    @ManyToMany(mappedBy = "courses")
-    private Set<Student> students;
-
     public Course() {
     }
 
-    public Course(Long id, String name, Set<Student> students) {
+    public Course(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.students = students;
+
     }
 
     public Long getId() {
@@ -42,20 +37,13 @@ public class Course {
         this.name = name;
     }
 
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
-    }
 
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", students=" + students +
+                ", students=" +
                 '}';
     }
 }

@@ -1,5 +1,7 @@
 package nl.codegorilla.sap.service;
 
+import jakarta.transaction.Transactional;
+import nl.codegorilla.sap.exception.StudentNotFoundException;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.repository.StudentRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,23 @@ public class StudentService {
 
     public List<Student> findAllStudents() {
         return studentRepository.findAll();
+    }
+
+    public Student addStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    public Student findStudentById(Long id) {
+        return studentRepository.findStudentById(id).orElseThrow(() -> new StudentNotFoundException("Student with id: " + id + " not found."));
+    }
+
+    public Student updateStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    @Transactional
+    public void deleteStudent(Long id) {
+        studentRepository.deleteStudentById(id);
     }
 
 }
