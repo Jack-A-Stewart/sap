@@ -1,31 +1,64 @@
 package nl.codegorilla.sap.model;
 
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
+@Entity
 public class CourseStatus {
 
-    @OneToOne(targetEntity = Student.class, mappedBy = "id")
-    private final long studentId;
-    @OneToOne(targetEntity = Course.class, mappedBy = "id")
-    private final long courseId;
-    private final int courseStatus;
+    @EmbeddedId
+    CourseStatusKey id;
 
+    @ManyToOne
+    @MapsId("studentId")
+    @JoinColumn(name = "student_id")
+    Student student;
 
-    public CourseStatus(long studentId, long courseId, int courseStatus) {
-        this.studentId = studentId;
-        this.courseId = courseId;
-        this.courseStatus = courseStatus;
+    @ManyToOne
+    @MapsId("courseId")
+    @JoinColumn(name = "course_id")
+    Course course;
+
+    String status;
+
+    public CourseStatus(CourseStatusKey id, Student student, Course course, String status) {
+        this.id = id;
+        this.student = student;
+        this.course = course;
+        this.status = status;
     }
 
-    public long getCourseId() {
-        return courseId;
+    public CourseStatus() {
     }
 
-    public long getStudentId() {
-        return studentId;
+    public CourseStatusKey getId() {
+        return id;
     }
 
-    public int getCourseStatus() {
-        return courseStatus;
+    public void setId(CourseStatusKey id) {
+        this.id = id;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
