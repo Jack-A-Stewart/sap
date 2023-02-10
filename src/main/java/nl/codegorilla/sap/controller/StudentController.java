@@ -39,10 +39,10 @@ public class StudentController {
         return studentService.updateStudent(student);
     }
 
-
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable("id") Long id) {
         return studentService.deleteStudent(id);
     }
+
 
 }
