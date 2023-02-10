@@ -1,12 +1,14 @@
 package nl.codegorilla.sap.service;
 
 import jakarta.transaction.Transactional;
-import nl.codegorilla.sap.exception.StudentNotFoundException;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.repository.StudentRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -17,25 +19,34 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<Student> findAllStudents() {
-        return studentRepository.findAll();
+    public ResponseEntity<?> findAllStudents() {
+        List<Student> students = studentRepository.findAll();
+        return ResponseEntity.status(200).body(students);
     }
 
-    public Student addStudent(Student student) {
-        return studentRepository.save(student);
+    public ResponseEntity<?> addStudent(Student student) {
+        Student newStudent = studentRepository.save(student);
+        return ResponseEntity.status(201).body(newStudent);
     }
 
-    public Student findStudentById(Long id) {
-        return studentRepository.findStudentById(id).orElseThrow(() -> new StudentNotFoundException("Student with id: " + id + " not found."));
+    public ResponseEntity<?> findStudentById(Long id) {
+        Optional<Student> student = studentRepository.findStudentById(id);
+        if (student.isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("error", "Student with id: " + id + " not found."));
+        } else {
+            return ResponseEntity.status(200).body(student);
+        }
     }
 
-    public Student updateStudent(Student student) {
-        return studentRepository.save(student);
+    public ResponseEntity<?> updateStudent(Student student) {
+        Student updateStudent = studentRepository.save(student);
+        return ResponseEntity.status(200).body(updateStudent);
     }
 
     @Transactional
-    public void deleteStudent(Long id) {
+    public ResponseEntity<?> deleteStudent(Long id) {
         studentRepository.deleteStudentById(id);
+        return ResponseEntity.status(200).body("Student deleted.");
     }
 
 }
