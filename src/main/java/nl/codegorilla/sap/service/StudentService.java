@@ -49,4 +49,8 @@ public class StudentService {
         return ResponseEntity.status(200).body("Student deleted.");
     }
 
+    public Optional<Student> findStudentByEmail(String email) {
+        return studentRepository.findStudentByEmail(email);
+
+    }
 }

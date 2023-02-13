@@ -8,15 +8,19 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:63342")
 @RequestMapping("/course")
 public class CourseController {
 
+
+    // work damnit
     private final CourseService courseService;
 
     @Autowired
     public CourseController(CourseService courseService) {
         this.courseService = courseService;
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCourses() {
@@ -33,11 +37,10 @@ public class CourseController {
         return courseService.deleteCourse(id);
     }
 
-    @PostMapping("/custom")
-    public ResponseEntity<?> custom() {
-        Course course1 = new Course();
-        course1.setName("Bootcamp");
-        return courseService.addCourse(course1);
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateCourse(@RequestBody Course course) {
+        return courseService.addCourse(course);
     }
 
 

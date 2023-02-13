@@ -2,8 +2,6 @@ package nl.codegorilla.sap.model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 @Entity
 public class Student {
 
@@ -18,20 +16,20 @@ public class Student {
 
     private String email;
 
-    @OneToMany
-    private Set<CourseStatus> courseStatusSet;
+//    @OneToMany
+//    private Set<CourseStatus> courseStatusSet;
 
 
     public Student() {
     }
 
 
-    public Student(long id, String firstName, String lastName, String email, Set<CourseStatus> courseStatusSet) {
+    public Student(long id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.courseStatusSet = courseStatusSet;
+
     }
 
     public long getId() {
@@ -66,13 +64,6 @@ public class Student {
         this.email = email;
     }
 
-    public Set<CourseStatus> getCourseStatusSet() {
-        return courseStatusSet;
-    }
-
-    public void setCourseStatusSet(Set<CourseStatus> courseStatusSet) {
-        this.courseStatusSet = courseStatusSet;
-    }
 
     @Override
     public String toString() {

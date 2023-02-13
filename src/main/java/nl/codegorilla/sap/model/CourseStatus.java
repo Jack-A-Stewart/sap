@@ -18,10 +18,10 @@ public class CourseStatus {
     @JoinColumn(name = "course_id")
     Course course;
 
-    String status;
+    private String status;
 
-    public CourseStatus(CourseStatusKey id, Student student, Course course, String status) {
-        this.id = id;
+    public CourseStatus(Student student, Course course, String status) {
+        this.id = new CourseStatusKey(student.getId(), course.getId());
         this.student = student;
         this.course = course;
         this.status = status;
@@ -32,6 +32,15 @@ public class CourseStatus {
 
     public CourseStatusKey getId() {
         return id;
+    }
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setId(CourseStatusKey id) {
@@ -52,13 +61,5 @@ public class CourseStatus {
 
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

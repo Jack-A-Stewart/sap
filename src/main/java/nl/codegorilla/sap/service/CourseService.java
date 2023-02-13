@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseService {
 
     private final CourseRepository courseRepository;
+
 
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
@@ -31,5 +33,10 @@ public class CourseService {
     public ResponseEntity<?> deleteCourse(Long id) {
         courseRepository.deleteById(id);
         return ResponseEntity.status(200).body("Course deleted.");
+    }
+
+    public Optional<Course> findCourseByName(String name) {
+        return courseRepository.findCourseByName(name);
+
     }
 }

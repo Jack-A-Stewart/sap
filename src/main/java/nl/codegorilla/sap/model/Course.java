@@ -2,8 +2,6 @@ package nl.codegorilla.sap.model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 
 @Entity
 public class Course {
@@ -15,18 +13,15 @@ public class Course {
 
     private String name;
 
-    @OneToMany
-    private Set<CourseStatus> courseStatusSet;
-
 
     public Course() {
     }
 
-    public Course(long id, String name, Set<CourseStatus> courseStatusSet) {
+    public Course(long id, String name) {
         this.id = id;
         this.name = name;
-        this.courseStatusSet = courseStatusSet;
     }
+
 
     public long getId() {
         return id;
@@ -42,14 +37,6 @@ public class Course {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<CourseStatus> getCourseStatusSet() {
-        return courseStatusSet;
-    }
-
-    public void setCourseStatusSet(Set<CourseStatus> courseStatusSet) {
-        this.courseStatusSet = courseStatusSet;
     }
 
     @Override

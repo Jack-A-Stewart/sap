@@ -9,13 +9,14 @@ import java.util.Objects;
 @Embeddable
 public class CourseStatusKey implements Serializable {
 
+
     @Column(name = "student_id")
-    Long studentId;
+    long studentId;
 
     @Column(name = "course_id")
-    Long courseId;
+    long courseId;
 
-    public CourseStatusKey(Long studentId, Long courseId) {
+    public CourseStatusKey(long studentId, long courseId) {
         this.studentId = studentId;
         this.courseId = courseId;
     }
@@ -23,28 +24,28 @@ public class CourseStatusKey implements Serializable {
     public CourseStatusKey() {
     }
 
-    public Long getStudentId() {
+    public long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Long studentId) {
+    public void setStudentId(long studentId) {
         this.studentId = studentId;
     }
 
-    public Long getCourseId() {
+    public long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(Long courseId) {
+    public void setCourseId(long courseId) {
         this.courseId = courseId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CourseStatusKey that)) return false;
-        return getStudentId().equals(that.getStudentId()) && getCourseId().equals(that.getCourseId());
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof CourseStatusKey that)) return false;
+//        return getStudentId().equals(that.getStudentId()) && getCourseId().equals(that.getCourseId());
+//    }
 
     @Override
     public int hashCode() {
