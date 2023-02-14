@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:63342")
 @RequestMapping("/graduated")
 public class IsGraduatedController {
 
@@ -26,12 +26,11 @@ public class IsGraduatedController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/isGraduated")
+    @PostMapping("/isGraduated")
     public ResponseEntity<?> isGraduated(@RequestBody UserInput userInput) {
 
         System.out.println(userInput);
         Optional<Student> student = studentService.findStudentByEmail(userInput.getEmail());
-
         // to do only return the course status
 
         return courseStatusService.findCourseStatusById(student.get().getId());
@@ -39,13 +38,8 @@ public class IsGraduatedController {
     }
 
     @GetMapping("/test")
-    public UserInput testResponse(){
-        return new UserInput("bobcat@meow.com","Bootcamp");
+    public UserInput testResponse() {
+        return new UserInput("bobcat@meow.com", "Bootcamp");
 
     }
-
-
-
-
-
 }
