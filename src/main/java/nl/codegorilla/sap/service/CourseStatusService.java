@@ -33,7 +33,7 @@ public class CourseStatusService {
     @Transactional
     public ResponseEntity<?> deleteCourseById(Long id) {
         courseStatusRepository.deleteById(id);
-        return ResponseEntity.status(200).body("Course Status deleted.");
+        return ResponseEntity.status(200).body(Map.of("message", "Course Status deleted."));
     }
 
     public ResponseEntity<?> findCourseStatusById(Long id) {

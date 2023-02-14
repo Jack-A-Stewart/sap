@@ -46,7 +46,7 @@ public class StudentService {
     @Transactional
     public ResponseEntity<?> deleteStudent(Long id) {
         studentRepository.deleteStudentById(id);
-        return ResponseEntity.status(200).body("Student deleted.");
+        return ResponseEntity.status(200).body(Map.of("message", "Student deleted."));
     }
 
     public Optional<Student> findStudentByEmail(String email) {
