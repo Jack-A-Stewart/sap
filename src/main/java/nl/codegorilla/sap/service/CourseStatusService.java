@@ -41,7 +41,7 @@ public class CourseStatusService {
         if (courseStatus.isEmpty()) {
             return ResponseEntity.status(404).body(Map.of("error", "CourseStatus with id: " + id + " not found."));
         } else {
-            return ResponseEntity.status(200).body(courseStatus);
+            return ResponseEntity.status(200).body(courseStatus.get().getStatus());
         }
     }
 

@@ -14,6 +14,7 @@ public class Student {
 
     private String lastName;
 
+    @Column(unique = true)
     private String email;
 
 //    @OneToMany

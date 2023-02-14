@@ -33,6 +33,7 @@ public class IsGraduatedController {
         Optional<Student> student = studentService.findStudentByEmail(userInput.getEmail());
 
         // to do only return the course status
+
         return courseStatusService.findCourseStatusById(student.get().getId());
 
     }
