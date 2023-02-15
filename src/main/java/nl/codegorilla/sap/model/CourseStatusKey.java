@@ -40,16 +40,16 @@ public class CourseStatusKey implements Serializable {
         this.courseId = courseId;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof CourseStatusKey that)) return false;
-//        return getStudentId().equals(that.getStudentId()) && getCourseId().equals(that.getCourseId());
-//    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CourseStatusKey that)) return false;
+        return getStudentId() == that.getStudentId() && getCourseId() == that.getCourseId();
+    }
 
     @Override
     public int hashCode() {
         return Objects.hash(getStudentId(), getCourseId());
     }
-
 }

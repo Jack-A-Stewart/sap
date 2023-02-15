@@ -57,15 +57,15 @@ public class StudentController {
     // test method that creates 2 CourseStatus's with different students and courses.
     @PostMapping("/custom")
     public ResponseEntity<?> custom() {
-        Student student = new Student();
-        student.setFirstName("Bob");
-        student.setLastName("Cat");
-        student.setEmail("bobcat@meow.com");
-        studentService.addStudent(student);
+        Student student1 = new Student();
+        student1.setFirstName("Bob");
+        student1.setLastName("Cat");
+        student1.setEmail("bobcat@meow.com");
+        studentService.addStudent(student1);
         Course course = new Course();
         course.setName("Bootcamp");
         courseService.addCourse(course);
-        CourseStatus courseStatus = new CourseStatus(student, course, "Completed");
+        CourseStatus courseStatus = new CourseStatus(student1, course, "Completed");
         courseStatusService.addCourseStatus(courseStatus);
 
         Student student2 = new Student();
@@ -73,10 +73,16 @@ public class StudentController {
         student2.setLastName("Stewart");
         student2.setEmail("jackstewart@gmail.com");
         studentService.addStudent(student2);
-        Course course2 = new Course();
-        course2.setName("DevOps");
-        courseService.addCourse(course2);
-        CourseStatus courseStatus2 = new CourseStatus(student2, course2, "Not done");
+        Course devOps = new Course();
+        devOps.setName("DevOps");
+        courseService.addCourse(devOps);
+        CourseStatus courseStatus2 = new CourseStatus(student2, devOps, "Not done");
+
+        CourseStatus courseStatus3 = new CourseStatus(student1, devOps, "Completed");
+        courseStatusService.addCourseStatus(courseStatus3);
+
         return courseStatusService.addCourseStatus(courseStatus2);
+
+
     }
 }
