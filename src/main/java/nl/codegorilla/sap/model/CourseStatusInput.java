@@ -3,34 +3,28 @@ package nl.codegorilla.sap.model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin
-public class UserInput {
+public class CourseStatusInput {
 
     private String email;
 
     private String courseName;
 
 
-    public UserInput(String email, String courseName) {
+    public CourseStatusInput(String email, String courseName) {
         this.email = email;
         this.courseName = courseName;
     }
 
-    public UserInput() {
+    public CourseStatusInput() {
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getCourseName() {
         return courseName;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
 }

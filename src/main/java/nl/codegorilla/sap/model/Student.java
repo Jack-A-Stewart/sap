@@ -17,9 +17,6 @@ public class Student {
     @Column(unique = true)
     private String email;
 
-//    @OneToMany
-//    private Set<CourseStatus> courseStatusSet;
-
 
     public Student() {
     }
@@ -30,7 +27,6 @@ public class Student {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-
     }
 
     public long getId() {

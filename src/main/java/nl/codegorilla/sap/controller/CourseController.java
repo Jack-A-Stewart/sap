@@ -8,19 +8,16 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 @RequestMapping("/course")
 public class CourseController {
 
-
-    // work damnit
     private final CourseService courseService;
 
     @Autowired
     public CourseController(CourseService courseService) {
         this.courseService = courseService;
     }
-
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCourses() {
@@ -36,7 +33,6 @@ public class CourseController {
     public ResponseEntity<?> deleteCourse(@PathVariable("id") Long id) {
         return courseService.deleteCourse(id);
     }
-
 
     @PutMapping("/update")
     public ResponseEntity<?> updateCourse(@RequestBody Course course) {

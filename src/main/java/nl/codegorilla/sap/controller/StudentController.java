@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 @RequestMapping("/student")
 public class StudentController {
 
@@ -54,28 +54,29 @@ public class StudentController {
     }
 
 
+    // test method that creates 2 CourseStatus's with different students and courses.
     @PostMapping("/custom")
     public ResponseEntity<?> custom() {
-
-
         Student student = new Student();
         student.setFirstName("Bob");
         student.setLastName("Cat");
         student.setEmail("bobcat@meow.com");
-
         studentService.addStudent(student);
-
-
         Course course = new Course();
         course.setName("Bootcamp");
-
         courseService.addCourse(course);
+        CourseStatus courseStatus = new CourseStatus(student, course, "Completed");
+        courseStatusService.addCourseStatus(courseStatus);
 
-
-        CourseStatus courseStatus = new CourseStatus(student, course, "Completed!");
-
-        return courseStatusService.addCourseStatus(courseStatus);
-
-//        return studentService.addStudent(student);
+        Student student2 = new Student();
+        student2.setFirstName("Jack");
+        student2.setLastName("Stewart");
+        student2.setEmail("jackthemango@gmail.com");
+        studentService.addStudent(student2);
+        Course course2 = new Course();
+        course2.setName("DevOps");
+        courseService.addCourse(course2);
+        CourseStatus courseStatus2 = new CourseStatus(student2, course2, "Completed");
+        return courseStatusService.addCourseStatus(courseStatus2);
     }
 }
