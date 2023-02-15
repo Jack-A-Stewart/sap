@@ -71,12 +71,12 @@ public class StudentController {
         Student student2 = new Student();
         student2.setFirstName("Jack");
         student2.setLastName("Stewart");
-        student2.setEmail("jackthemango@gmail.com");
+        student2.setEmail("jackstewart@gmail.com");
         studentService.addStudent(student2);
         Course course2 = new Course();
         course2.setName("DevOps");
         courseService.addCourse(course2);
-        CourseStatus courseStatus2 = new CourseStatus(student2, course2, "Completed");
+        CourseStatus courseStatus2 = new CourseStatus(student2, course2, "Not done");
         return courseStatusService.addCourseStatus(courseStatus2);
     }
 }
