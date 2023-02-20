@@ -2,11 +2,13 @@ package nl.codegorilla.sap.controller;
 
 import nl.codegorilla.sap.model.Course;
 import nl.codegorilla.sap.model.CourseStatus;
+import nl.codegorilla.sap.model.SetStatus;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.service.CourseService;
 import nl.codegorilla.sap.service.CourseStatusService;
 import nl.codegorilla.sap.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +42,7 @@ public class StudentController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable("id") Long id) {
-        return studentService.findStudentById(id);
+        return new ResponseEntity<>(studentService.findStudentById(id), HttpStatus.OK);
     }
 
     @PutMapping("/update")
@@ -51,6 +53,12 @@ public class StudentController {
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable("id") Long id) {
         return studentService.deleteStudent(id);
+    }
+
+
+    @PostMapping("/setCourseStatus")
+    public ResponseEntity<?> setCourseStatus(@RequestBody SetStatus setStatus) {
+        return new ResponseEntity<>(courseStatusService.addCourseStatus(setStatus), HttpStatus.CREATED);
     }
 
 

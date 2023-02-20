@@ -1,6 +1,7 @@
 package nl.codegorilla.sap.service;
 
 import jakarta.transaction.Transactional;
+import nl.codegorilla.sap.exception.StudentNotFoundException;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.repository.StudentRepository;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +30,9 @@ public class StudentService {
         return ResponseEntity.status(201).body(newStudent);
     }
 
-    public ResponseEntity<?> findStudentById(Long id) {
-        Optional<Student> student = studentRepository.findStudentById(id);
-        if (student.isEmpty()) {
-            return ResponseEntity.status(404).body(Map.of("error", "Student with id: " + id + " not found."));
-        } else {
-            return ResponseEntity.status(200).body(student);
-        }
+    public Student findStudentById(Long id) {
+        return studentRepository.findStudentById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student with id: " + id + " not found."));
     }
 
     public ResponseEntity<?> updateStudent(Student student) {
