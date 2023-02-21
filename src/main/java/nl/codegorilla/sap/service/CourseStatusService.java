@@ -5,10 +5,7 @@ import nl.codegorilla.sap.model.*;
 import nl.codegorilla.sap.repository.CourseStatusRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CourseStatusService {
@@ -44,8 +41,8 @@ public class CourseStatusService {
         Optional<Student> student = studentService.findStudentByEmail(courseStatusInput.getEmail());
         Course course = courseService.findCourseByName(courseStatusInput.getCourseName());
 
-         // add check if course was not found.
-        if (student.isEmpty())  {
+        // add check if course was not found.
+        if (student.isEmpty()) {
             return Map.of("status", "false");
         }
 
@@ -68,16 +65,16 @@ public class CourseStatusService {
         return courseStatus;
     }
 
-    public Map<String, String> courseNameStatusList(Long id) {
+    public List<CourseNameStatus> courseNameStatusList(Long id) {
         List<CourseStatus> courseStatusList = courseStatusRepository.findAllByStudentId(id);
 
-        Map<String, String> courseNameAndCourseStatus = new HashMap<>();
+        List<CourseNameStatus> courseNameStatusList = new ArrayList<>();
 
         for (CourseStatus courseStatus : courseStatusList) {
-            courseNameAndCourseStatus.put(courseStatus.getCourse().getName(), courseStatus.getStatus());
+            courseNameStatusList.add(new CourseNameStatus(courseStatus.getId().getCourseId(), courseStatus.getCourse().getName(), courseStatus.getStatus()));
         }
 
-        return courseNameAndCourseStatus;
+        return courseNameStatusList;
     }
 
 

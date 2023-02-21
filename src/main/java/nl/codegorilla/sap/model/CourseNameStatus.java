@@ -12,6 +12,12 @@ public class CourseNameStatus implements Serializable {
     public CourseNameStatus() {
     }
 
+    public CourseNameStatus(Long id, String courseName, String status) {
+        this.id = id;
+        this.courseName = courseName;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
