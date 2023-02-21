@@ -1,18 +1,18 @@
-package nl.codegorilla.sap.model;
+package nl.codegorilla.sap.model.dto;
 
 import java.io.Serializable;
 
-public class CourseNameStatus implements Serializable {
+public class CourseNameStatusDTO implements Serializable {
 
     private Long id;
     private String courseName;
     private String status;
 
 
-    public CourseNameStatus() {
+    public CourseNameStatusDTO() {
     }
 
-    public CourseNameStatus(Long id, String courseName, String status) {
+    public CourseNameStatusDTO(Long id, String courseName, String status) {
         this.id = id;
         this.courseName = courseName;
         this.status = status;

@@ -21,5 +21,7 @@ public class CustomExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+
 }
 

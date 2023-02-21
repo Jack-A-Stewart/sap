@@ -2,6 +2,8 @@ package nl.codegorilla.sap.service;
 
 import jakarta.transaction.Transactional;
 import nl.codegorilla.sap.model.*;
+import nl.codegorilla.sap.model.dto.CourseNameStatusDTO;
+import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
 import nl.codegorilla.sap.repository.CourseStatusRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,7 @@ public class CourseStatusService {
         courseStatusRepository.deleteById(id);
     }
 
-    public Map<String, String> isGraduated(CourseStatusInput courseStatusInput) {
+    public Map<String, String> isGraduated(CourseStatusInputDTO courseStatusInput) {
         Optional<Student> student = studentService.findStudentByEmail(courseStatusInput.getEmail());
         Course course = courseService.findCourseByName(courseStatusInput.getCourseName());
 
@@ -55,7 +57,7 @@ public class CourseStatusService {
         return Map.of("status", "false");
     }
 
-    public CourseStatus addCourseStatus(CourseNameStatus courseNameStatus) {
+    public CourseStatus addCourseStatus(CourseNameStatusDTO courseNameStatus) {
         Student student = studentService.findStudentById(courseNameStatus.getId());
         Course course = courseService.findCourseByName(courseNameStatus.getCourseName());
         String status = courseNameStatus.getStatus();
@@ -65,13 +67,13 @@ public class CourseStatusService {
         return courseStatus;
     }
 
-    public List<CourseNameStatus> courseNameStatusList(Long id) {
+    public List<CourseNameStatusDTO> courseNameStatusList(Long id) {
         List<CourseStatus> courseStatusList = courseStatusRepository.findAllByStudentId(id);
 
-        List<CourseNameStatus> courseNameStatusList = new ArrayList<>();
+        List<CourseNameStatusDTO> courseNameStatusList = new ArrayList<>();
 
         for (CourseStatus courseStatus : courseStatusList) {
-            courseNameStatusList.add(new CourseNameStatus(courseStatus.getId().getCourseId(), courseStatus.getCourse().getName(), courseStatus.getStatus()));
+            courseNameStatusList.add(new CourseNameStatusDTO(courseStatus.getId().getCourseId(), courseStatus.getCourse().getName(), courseStatus.getStatus()));
         }
 
         return courseNameStatusList;

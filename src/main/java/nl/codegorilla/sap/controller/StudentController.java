@@ -1,7 +1,7 @@
 package nl.codegorilla.sap.controller;
 
 import nl.codegorilla.sap.model.Course;
-import nl.codegorilla.sap.model.CourseNameStatus;
+import nl.codegorilla.sap.model.dto.CourseNameStatusDTO;
 import nl.codegorilla.sap.model.CourseStatus;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.service.CourseService;
@@ -87,7 +87,8 @@ public class StudentController {
      * @return ResponseEntity with the added CourseStatus and status code 201
      */
     @PostMapping("/setCourseStatus")
-    public ResponseEntity<?> setCourseStatus(@RequestBody CourseNameStatus courseNameStatus) {
+    public ResponseEntity<?> setCourseStatus(@RequestBody CourseNameStatusDTO courseNameStatus) {
+        System.out.println(courseNameStatus);
         return new ResponseEntity<>(courseStatusService.addCourseStatus(courseNameStatus), HttpStatus.CREATED);
     }
 
