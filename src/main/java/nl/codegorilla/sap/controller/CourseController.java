@@ -22,11 +22,16 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+
+    /**
+     * @return list of all courses
+     */
     @GetMapping("/all")
     public ResponseEntity<List<Course>> getAllCourses() {
         List<Course> courses = courseService.findAllCourses();
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
+
 
     @GetMapping("/find/{id}")
     public ResponseEntity<Course> findCourseById(@PathVariable("id") Long id) {

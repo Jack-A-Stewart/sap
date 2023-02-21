@@ -1,6 +1,8 @@
 package nl.codegorilla.sap.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class CourseStatus {
@@ -8,13 +10,15 @@ public class CourseStatus {
     @EmbeddedId
     CourseStatusKey id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("studentId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id")
     Student student;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("courseId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "course_id")
     Course course;
 
