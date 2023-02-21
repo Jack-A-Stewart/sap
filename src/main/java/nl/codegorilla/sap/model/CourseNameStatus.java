@@ -2,13 +2,14 @@ package nl.codegorilla.sap.model;
 
 import java.io.Serializable;
 
-public class SetStatus implements Serializable {
+public class CourseNameStatus implements Serializable {
 
     private Long id;
     private String courseName;
     private String status;
 
-    public SetStatus() {
+
+    public CourseNameStatus() {
     }
 
     public Long getId() {

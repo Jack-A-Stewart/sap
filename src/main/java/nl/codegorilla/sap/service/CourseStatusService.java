@@ -2,8 +2,8 @@ package nl.codegorilla.sap.service;
 
 import jakarta.transaction.Transactional;
 import nl.codegorilla.sap.model.Course;
+import nl.codegorilla.sap.model.CourseNameStatus;
 import nl.codegorilla.sap.model.CourseStatus;
-import nl.codegorilla.sap.model.SetStatus;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.repository.CourseStatusRepository;
 import org.springframework.http.ResponseEntity;
@@ -62,10 +62,10 @@ public class CourseStatusService {
 //        return ResponseEntity.status(404).body(Map.of("status", "false"));
 //    }
 
-    public CourseStatus addCourseStatus(SetStatus setStatus) {
-        Student student = studentService.findStudentById(setStatus.getId());
-        Course course = courseService.findCourseByName(setStatus.getCourseName());
-        String status = setStatus.getStatus();
+    public CourseStatus addCourseStatus(CourseNameStatus courseNameStatus) {
+        Student student = studentService.findStudentById(courseNameStatus.getId());
+        Course course = courseService.findCourseByName(courseNameStatus.getCourseName());
+        String status = courseNameStatus.getStatus();
 
         CourseStatus courseStatus = new CourseStatus(student, course, status);
         courseStatusRepository.save(courseStatus);

@@ -1,8 +1,8 @@
 package nl.codegorilla.sap.controller;
 
 import nl.codegorilla.sap.model.Course;
+import nl.codegorilla.sap.model.CourseNameStatus;
 import nl.codegorilla.sap.model.CourseStatus;
-import nl.codegorilla.sap.model.SetStatus;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.service.CourseService;
 import nl.codegorilla.sap.service.CourseStatusService;
@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -30,15 +32,16 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllStudents() {
-        return studentService.findAllStudents();
+    public ResponseEntity<List<Student>> getAllStudents() {
+        List<Student> students = studentService.findAllStudents();
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addStudent(@RequestBody Student student) {
-        return studentService.addStudent(student);
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+        Student newStudent = studentService.addStudent(student);
+        return new ResponseEntity<>(newStudent, HttpStatus.CREATED);
     }
-
 
     @GetMapping("/find/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable("id") Long id) {
@@ -47,20 +50,20 @@ public class StudentController {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateStudent(@RequestBody Student student) {
-        return studentService.updateStudent(student);
+        Student updateStudent = studentService.updateStudent(student);
+        return new ResponseEntity<>(updateStudent, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable("id") Long id) {
-        return studentService.deleteStudent(id);
+        studentService.deleteStudent(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     @PostMapping("/setCourseStatus")
-    public ResponseEntity<?> setCourseStatus(@RequestBody SetStatus setStatus) {
-        return new ResponseEntity<>(courseStatusService.addCourseStatus(setStatus), HttpStatus.CREATED);
+    public ResponseEntity<?> setCourseStatus(@RequestBody CourseNameStatus courseNameStatus) {
+        return new ResponseEntity<>(courseStatusService.addCourseStatus(courseNameStatus), HttpStatus.CREATED);
     }
-
 
     // test method that creates 2 CourseStatus's with different students and courses.
     @PostMapping("/custom")

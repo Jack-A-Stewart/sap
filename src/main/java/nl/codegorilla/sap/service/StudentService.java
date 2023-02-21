@@ -4,11 +4,9 @@ import jakarta.transaction.Transactional;
 import nl.codegorilla.sap.exception.StudentNotFoundException;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.repository.StudentRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -20,14 +18,12 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public ResponseEntity<?> findAllStudents() {
-        List<Student> students = studentRepository.findAll();
-        return ResponseEntity.status(200).body(students);
+    public List<Student> findAllStudents() {
+        return studentRepository.findAll();
     }
 
-    public ResponseEntity<?> addStudent(Student student) {
-        Student newStudent = studentRepository.save(student);
-        return ResponseEntity.status(201).body(newStudent);
+    public Student addStudent(Student student) {
+        return studentRepository.save(student);
     }
 
     public Student findStudentById(Long id) {
@@ -35,15 +31,13 @@ public class StudentService {
                 .orElseThrow(() -> new StudentNotFoundException("Student with id: " + id + " not found."));
     }
 
-    public ResponseEntity<?> updateStudent(Student student) {
-        Student updateStudent = studentRepository.save(student);
-        return ResponseEntity.status(200).body(updateStudent);
+    public Student updateStudent(Student student) {
+        return studentRepository.save(student);
     }
 
     @Transactional
-    public ResponseEntity<?> deleteStudent(Long id) {
+    public void deleteStudent(Long id) {
         studentRepository.deleteStudentById(id);
-        return ResponseEntity.status(200).body(Map.of("message", "Student deleted."));
     }
 
     public Optional<Student> findStudentByEmail(String email) {
