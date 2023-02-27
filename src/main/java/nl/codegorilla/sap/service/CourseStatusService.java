@@ -1,6 +1,7 @@
 package nl.codegorilla.sap.service;
 
 import jakarta.transaction.Transactional;
+import nl.codegorilla.sap.exception.CourseNotFoundException;
 import nl.codegorilla.sap.model.*;
 import nl.codegorilla.sap.model.dto.CourseNameStatusDTO;
 import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
@@ -41,12 +42,19 @@ public class CourseStatusService {
 
     public Map<String, String> isGraduated(CourseStatusInputDTO courseStatusInput) {
         Optional<Student> student = studentService.findStudentByEmail(courseStatusInput.getEmail());
-        Course course = courseService.findCourseByName(courseStatusInput.getCourseName());
+        Course course;
+        try {
+            course = courseService.findCourseByName(courseStatusInput.getCourseName());
+        } catch (CourseNotFoundException courseNotFoundException) {
+            return Map.of("status", "false");
+        }
+
 
         // add check if course was not found.
         if (student.isEmpty()) {
             return Map.of("status", "false");
         }
+
 
         Optional<CourseStatus> courseStatus = courseStatusRepository.findCourseStatusByStudentIdAndCourseId(student.get().getId(), course.getId());
 
@@ -57,6 +65,8 @@ public class CourseStatusService {
         return Map.of("status", "false");
     }
 
+
+    // adds a new courseStatus
     public CourseStatus addCourseStatus(CourseNameStatusDTO courseNameStatus) {
         Student student = studentService.findStudentById(courseNameStatus.getId());
         Course course = courseService.findCourseByName(courseNameStatus.getCourseName());
@@ -67,6 +77,8 @@ public class CourseStatusService {
         return courseStatus;
     }
 
+
+    // gets a list of all the courseStatus's with the given student ID
     public List<CourseNameStatusDTO> courseNameStatusList(Long id) {
         List<CourseStatus> courseStatusList = courseStatusRepository.findAllByStudentId(id);
 
