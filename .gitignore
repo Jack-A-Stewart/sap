@@ -1,3 +1,5 @@
 # Never commit a db
 *.db
 target
+
+src/main/resources/application-dev.yml
