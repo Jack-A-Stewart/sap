@@ -1,12 +1,13 @@
 spring:
   datasource:
-    password: ${PGPASSWORD}
     url: ${DATABASE_URL}
     username: ${PGUSER}
+    password: ${PGPASSWORD}
+
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true

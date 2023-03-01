@@ -1,5 +1,11 @@
-# Never commit a db
+# Database
 *.db
+
+# Build files
 target
 
+# IDE Files
+.idea
+
+# Dev Environment Files
 src/main/resources/application-dev.yml
