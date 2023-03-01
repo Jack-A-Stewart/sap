@@ -7,7 +7,6 @@ import nl.codegorilla.sap.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -40,8 +39,9 @@ public class StudentService {
         studentRepository.deleteStudentById(id);
     }
 
-    public Optional<Student> findStudentByEmail(String email) {
-        return studentRepository.findStudentByEmail(email);
+    public Student findStudentByEmail(String email) {
+        return studentRepository.findStudentByEmail(email)
+                .orElseThrow(() -> new StudentNotFoundException("Student with email: " + email + " not found."));
 
     }
 }

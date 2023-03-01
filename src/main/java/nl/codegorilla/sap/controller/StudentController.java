@@ -114,7 +114,7 @@ public class StudentController {
         Course course = new Course();
         course.setName("Bootcamp");
         courseService.addCourse(course);
-        CourseStatus courseStatus = new CourseStatus(student1, course, "Completed");
+        CourseStatus courseStatus = new CourseStatus(student1, course, "graduated");
         courseStatusService.addCourseStatus(courseStatus);
 
         Student student2 = new Student();
@@ -127,7 +127,7 @@ public class StudentController {
         courseService.addCourse(devOps);
         CourseStatus courseStatus2 = new CourseStatus(student2, devOps, "Not done");
 
-        CourseStatus courseStatus3 = new CourseStatus(student1, devOps, "Completed");
+        CourseStatus courseStatus3 = new CourseStatus(student1, devOps, "graduated");
         courseStatusService.addCourseStatus(courseStatus3);
 
         return new ResponseEntity<>(courseStatusService.addCourseStatus(courseStatus2), HttpStatus.OK);

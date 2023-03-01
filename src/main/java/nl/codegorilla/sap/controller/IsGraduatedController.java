@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin()
-@RequestMapping("/graduated")
+@RequestMapping("/")
 public class IsGraduatedController {
 
     private final CourseStatusService courseStatusService;
@@ -36,4 +36,6 @@ public class IsGraduatedController {
     public CourseStatusInputDTO testResponse() {
         return new CourseStatusInputDTO("bobcat@meow.com", "Bootcamp");
     }
+
+
 }
