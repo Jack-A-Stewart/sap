@@ -1,12 +1,12 @@
-url: ${PGURL}
-user: ${PGUSER}
-password: ${PGPASSWORD}
+url: ${URL}
+user: ${USER}
+password: ${PASSWORD}
 
 spring:
   datasource:
-    url: ${PGURL}
-    username: ${PGUSER}
-    password: ${PGPASSWORD}
+    url: ${URL}
+    username: ${USER}
+    password: ${PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
