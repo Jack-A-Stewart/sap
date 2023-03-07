@@ -1,11 +1,15 @@
+url: ${URL}
+user: ${USER}
+password: ${PASSWORD}
+
 spring:
   datasource:
-    url: ${DATABASE_URL}
-    username: ${PGUSER}
-    password: ${PGPASSWORD}
+    url: ${URL}
+    username: ${USER}
+    password: ${PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-    hibernate:
-      ddl-auto: update
+    hibernate.ddl-auto: update
