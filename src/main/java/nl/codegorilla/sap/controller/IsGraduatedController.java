@@ -1,5 +1,6 @@
 package nl.codegorilla.sap.controller;
 
+import com.opencsv.exceptions.CsvException;
 import nl.codegorilla.sap.fileHandling.CsvHandler;
 import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
 import nl.codegorilla.sap.service.CourseStatusService;
@@ -9,17 +10,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
+
 @RestController
 @CrossOrigin()
 @RequestMapping("/")
 public class IsGraduatedController {
 
     private final CourseStatusService courseStatusService;
+    private final CsvHandler csvHandler;
 
 
     @Autowired
-    public IsGraduatedController(CourseStatusService courseStatusService) {
+    public IsGraduatedController(CourseStatusService courseStatusService, CsvHandler csvHandler) {
         this.courseStatusService = courseStatusService;
+        this.csvHandler = csvHandler;
     }
 
     /**
@@ -33,13 +39,12 @@ public class IsGraduatedController {
 
 
     @PostMapping("/upload-csv")
-    public ResponseEntity<?> uploadCsvFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadCsvFile(@RequestParam("file") MultipartFile file) throws IOException, CsvException {
         // Your code to handle the CSV file upload
-        CsvHandler csvHandler = new CsvHandler();
-        csvHandler.readCsvFile(file);
-
-        return null;
+        List<String[]> strings = csvHandler.readCsvFile(file);
+        return csvHandler.write(strings, file);
     }
+
 
     /**
      * @return Test method

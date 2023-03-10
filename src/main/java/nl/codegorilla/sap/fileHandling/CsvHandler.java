@@ -1,62 +1,79 @@
 package nl.codegorilla.sap.fileHandling;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
-import com.opencsv.bean.CsvToBeanBuilder;
-import nl.codegorilla.sap.model.TempFileObject;
+import com.opencsv.exceptions.CsvException;
+import nl.codegorilla.sap.service.CourseStatusService;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class CsvHandler implements FileHandler {
 
+    private final CourseStatusService courseStatusService;
+
+    public CsvHandler(CourseStatusService courseStatusService) {
+        this.courseStatusService = courseStatusService;
+    }
 
     @Override
-    public List<String[]> readCsvFile(MultipartFile file) {
+    public List<String[]> readCsvFile(MultipartFile file) throws IOException, CsvException {
 //
-        try {
-            Reader reader = new InputStreamReader(file.getInputStream());
-            CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
-            List<TempFileObject> result = new CsvToBeanBuilder<TempFileObject>(csvReader).withType(TempFileObject.class).build().parse();
-            System.out.println(result);
+        InputStream inputStream = file.getInputStream(); // obtain an InputStream object from the MultipartFile
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
+        CSVReader csvReader = new CSVReader(reader);
+        List<String[]> data = csvReader.readAll();
 
-        } catch (IOException exception) {
-            System.out.println("stuff went wrong");
+        List<String[]> updatedData = new ArrayList<>();
+
+        for (String[] strings : data) {
+            updatedData.add(courseStatusService.csvCheck(strings));
         }
-return null;
+        return updatedData;
+
 
     }
 
     @Override
-    public void write(MultipartFile content) {
+    public void write(List<String[]> data) {
 
     }
 
-
-    // need filepath??
-    public void write(List<String[]> data, String filename, String extraColumnData) throws IOException {
-        FileWriter writer = new FileWriter(filename);
+    //    // need filepath??
+    public ResponseEntity<?> write(List<String[]> data, MultipartFile file) throws IOException {
+        FileWriter writer = new FileWriter(file.getName());
         CSVWriter csvWriter = new CSVWriter(writer);
+        csvWriter.writeAll(data);
 
-        List<String[]> rowsWithExtraColumn = new ArrayList<>();
-        for (String[] row : data) {
-            String[] rowWithExtraColumn = Arrays.copyOf(row, row.length + 1);
-            rowWithExtraColumn[rowWithExtraColumn.length - 1] = extraColumnData;
-            rowsWithExtraColumn.add(rowWithExtraColumn);
-        }
 
-        csvWriter.writeAll(rowsWithExtraColumn);
+        // Convert the data to a CSV string
+        StringWriter stringWriter = new StringWriter();
+        CSVWriter csvWriter2 = new CSVWriter(stringWriter);
+        csvWriter2.writeAll(data);
+        String csv = stringWriter.toString();
 
-        csvWriter.close();
-        writer.close();
+        // Set the content type and headers
+        ByteArrayResource resource = new ByteArrayResource(csv.getBytes());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=data.csv");
+        headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+
+        // Return the response object
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
     }
 }
+//}
 

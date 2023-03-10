@@ -91,8 +91,30 @@ public class CourseStatusService {
     // separate steps for dealing with csv (or any kind of files) reading/writing files for example
 
 
+    public String[] csvCheck(String[] data) {
+        String[] strings = new String[3];
+        strings[0] = data[0];
+        strings[1] = data[1];
 
 
+        Student student;
+        Course course;
+        try {
+            student = studentService.findStudentByEmail(data[0]);
+            course = courseService.findCourseByName(data[1]);
+        } catch (Exception exception) {
 
+            strings[2] = "Unknown";
+            return strings;
+        }
 
+        Optional<CourseStatus> courseStatus = courseStatusRepository.findCourseStatusByStudentIdAndCourseId(student.getId(), course.getId());
+        data[2] = String.valueOf(courseStatus);
+        if (courseStatus.isPresent()) {
+            strings[2] = courseStatus.get().getStatus();
+        } else {
+            strings[2] = "Unknown";
+        }
+        return strings;
+    }
 }

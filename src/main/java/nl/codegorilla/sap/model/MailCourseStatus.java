@@ -1,32 +1,22 @@
 package nl.codegorilla.sap.model;
 
-import com.opencsv.bean.CsvBindByName;
+public class MailCourseStatus {
 
-public class TempFileObject {
-
-    @CsvBindByName(column = "email")
     private String email;
-    @CsvBindByName(column = "course")
+
     private String courseName;
     private String courseStatus;
 
-    public TempFileObject(String email, String courseName, String courseStatus) {
+    public MailCourseStatus(String email, String courseName) {
         this.email = email;
         this.courseName = courseName;
-        this.courseStatus = courseStatus;
     }
 
 
     // courseName is optional so this constructor will be used when it is not given/found
-    public TempFileObject(String email, String courseStatus) {
-        this.email = email;
-        this.courseStatus = courseStatus;
-    }
-
-    public TempFileObject(String email) {
+    public MailCourseStatus(String email) {
         this.email = email;
     }
-
 
     public String getEmail() {
         return email;

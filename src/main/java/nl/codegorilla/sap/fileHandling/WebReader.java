@@ -1,19 +1,15 @@
 package nl.codegorilla.sap.fileHandling;
 
-import org.springframework.web.multipart.MultipartFile;
+public class WebReader {
 
-import java.util.List;
-
-public class WebReader implements FileHandler {
-
-
-    @Override
-    public List<String[]> readCsvFile(MultipartFile file) {
-        return null;
-    }
-
-    @Override
-    public void write(MultipartFile content) {
-
-    }
+//
+//    @Override
+//    public void readCsvFile(MultipartFile file) throws IOException, CsvException {
+//
+//    }
+//
+//    @Override
+//    public void write(List<String[]> data) {
+//
+//    }
 }
