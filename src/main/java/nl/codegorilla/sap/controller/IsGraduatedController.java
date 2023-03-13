@@ -1,17 +1,22 @@
 package nl.codegorilla.sap.controller;
 
-import com.opencsv.exceptions.CsvException;
+
 import nl.codegorilla.sap.fileHandling.CsvHandler;
 import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
 import nl.codegorilla.sap.service.CourseStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 @RestController
 @CrossOrigin()
@@ -37,13 +42,24 @@ public class IsGraduatedController {
         return new ResponseEntity<>(courseStatusService.isGraduated(courseStatusInput), HttpStatus.OK);
     }
 
-
     @PostMapping("/csv")
-    public ResponseEntity<?> uploadCsvFile(@RequestParam("file") MultipartFile file) throws IOException, CsvException {
-        // Your code to handle the CSV file upload
-        List<String[]> strings = csvHandler.readCsvFile(file);
-        return csvHandler.write(strings, file);
+    public ResponseEntity<?> csv(@RequestParam("file") MultipartFile file) {
+        String path = csvHandler.csvHandler(file);
+
+        try {
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(Paths.get(path)));
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + path);
+            headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(resource.contentLength())
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .body(resource);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-
-
 }
