@@ -13,7 +13,5 @@ public interface CourseStatusRepository extends JpaRepository<CourseStatus, Long
 
     Optional<CourseStatus> findCourseStatusByStudentIdAndCourseId(Long studentId, Long courseId);
 
-    // SELECT COURSE_ID FROM COURSE_STATUS WHERE STUDENT_ID = 1
-
     List<CourseStatus> findAllByStudentId(Long id);
 }

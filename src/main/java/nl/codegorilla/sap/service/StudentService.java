@@ -36,7 +36,7 @@ public class StudentService {
 
     @Transactional
     public void deleteStudent(Long id) {
-        studentRepository.deleteStudentById(id);
+        studentRepository.deleteById(id);
     }
 
     public Student findStudentByEmail(String email) {
