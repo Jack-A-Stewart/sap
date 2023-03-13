@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin()
-@RequestMapping("/")
+@RequestMapping("/check")
 public class IsGraduatedController {
 
     private final CourseStatusService courseStatusService;
@@ -32,26 +32,17 @@ public class IsGraduatedController {
      * @param courseStatusInput necessary parameters to check the status of a student/course
      * @return True if student has graduated that course and false for anything else
      */
-    @PostMapping("/isGraduated")
+    @PostMapping("/single")
     public ResponseEntity<?> isGraduated(@RequestBody CourseStatusInputDTO courseStatusInput) {
         return new ResponseEntity<>(courseStatusService.isGraduated(courseStatusInput), HttpStatus.OK);
     }
 
 
-    @PostMapping("/upload-csv")
+    @PostMapping("/csv")
     public ResponseEntity<?> uploadCsvFile(@RequestParam("file") MultipartFile file) throws IOException, CsvException {
         // Your code to handle the CSV file upload
         List<String[]> strings = csvHandler.readCsvFile(file);
         return csvHandler.write(strings, file);
-    }
-
-
-    /**
-     * @return Test method
-     */
-    @GetMapping("/test")
-    public CourseStatusInputDTO testResponse() {
-        return new CourseStatusInputDTO("bobcat@meow.com", "Bootcamp");
     }
 
 
