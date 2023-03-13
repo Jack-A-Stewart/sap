@@ -3,11 +3,9 @@ package nl.codegorilla.sap.fileHandling;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.*;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
-
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import nl.codegorilla.sap.model.MailCourseStatus;
 import nl.codegorilla.sap.service.CourseStatusService;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +27,7 @@ public class CsvHandler implements FileHandler {
     public CsvHandler(CourseStatusService courseStatusService) {
         this.courseStatusService = courseStatusService;
     }
+
     public String csvHandler(MultipartFile file) {
         List<MailCourseStatus> list = read(file);
 
@@ -36,7 +35,7 @@ public class CsvHandler implements FileHandler {
 
         // check if null
 
-        for( MailCourseStatus mailCourseStatus : list) {
+        for (MailCourseStatus mailCourseStatus : list) {
             updatedList.add(courseStatusService.csvCheck(mailCourseStatus));
         }
 
@@ -61,7 +60,7 @@ public class CsvHandler implements FileHandler {
 
             list = csvToBean.parse();
 
-            for(MailCourseStatus mailCourseStatus : list) {
+            for (MailCourseStatus mailCourseStatus : list) {
                 mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
                 mailCourseStatus.setCourse(mailCourseStatus.getCourse().trim());
             }

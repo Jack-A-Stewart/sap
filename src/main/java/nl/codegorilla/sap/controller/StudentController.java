@@ -1,9 +1,9 @@
 package nl.codegorilla.sap.controller;
 
 import nl.codegorilla.sap.model.Course;
-import nl.codegorilla.sap.model.dto.CourseNameStatusDTO;
 import nl.codegorilla.sap.model.CourseStatus;
 import nl.codegorilla.sap.model.Student;
+import nl.codegorilla.sap.model.dto.CourseNameStatusDTO;
 import nl.codegorilla.sap.service.CourseService;
 import nl.codegorilla.sap.service.CourseStatusService;
 import nl.codegorilla.sap.service.StudentService;

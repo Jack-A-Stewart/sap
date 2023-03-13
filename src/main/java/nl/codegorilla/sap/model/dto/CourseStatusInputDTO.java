@@ -11,7 +11,7 @@ public class CourseStatusInputDTO {
         this.email = email;
         this.courseName = courseName;
     }
-    
+
 
     public String getEmail() {
         return email;

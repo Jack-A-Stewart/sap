@@ -14,5 +14,4 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     void deleteById(Long id);
 
 
-
 }
