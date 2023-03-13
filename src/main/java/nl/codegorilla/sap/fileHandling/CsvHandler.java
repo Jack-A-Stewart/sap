@@ -4,6 +4,7 @@ import com.opencsv.CSVWriter;
 import com.opencsv.bean.*;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import nl.codegorilla.sap.exception.InvalidFileException;
 import nl.codegorilla.sap.model.MailCourseStatus;
 import nl.codegorilla.sap.service.CourseStatusService;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,9 @@ public class CsvHandler implements FileHandler {
     }
 
     public List<MailCourseStatus> read(MultipartFile file) {
+
+        if (file.isEmpty()) throw new InvalidFileException("File is empty");
+
         List<MailCourseStatus> list = new ArrayList<>();
 
         try (InputStream inputStream = file.getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
