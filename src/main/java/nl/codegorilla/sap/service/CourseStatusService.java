@@ -1,8 +1,11 @@
 package nl.codegorilla.sap.service;
 
 import jakarta.transaction.Transactional;
+import nl.codegorilla.sap.exception.CourseNotFoundException;
+import nl.codegorilla.sap.exception.StudentNotFoundException;
 import nl.codegorilla.sap.model.Course;
 import nl.codegorilla.sap.model.CourseStatus;
+import nl.codegorilla.sap.model.MailCourseStatus;
 import nl.codegorilla.sap.model.Student;
 import nl.codegorilla.sap.model.dto.CourseNameStatusDTO;
 import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class CourseStatusService {
@@ -88,33 +93,29 @@ public class CourseStatusService {
         return courseNameStatusList;
     }
 
-    // separate steps for dealing with csv (or any kind of files) reading/writing files for example
-
-
-    public String[] csvCheck(String[] data) {
-        String[] strings = new String[3];
-        strings[0] = data[0];
-        strings[1] = data[1];
-
+    public MailCourseStatus csvCheck(MailCourseStatus mailCourseStatus) {
 
         Student student;
         Course course;
-        try {
-            student = studentService.findStudentByEmail(data[0]);
-            course = courseService.findCourseByName(data[1]);
-        } catch (Exception exception) {
 
-            strings[2] = "Unknown";
-            return strings;
+        try {
+            student = studentService.findStudentByEmail(mailCourseStatus.getEmail());
+            course = courseService.findCourseByName(mailCourseStatus.getCourse());
+        } catch (StudentNotFoundException | CourseNotFoundException e) {
+            mailCourseStatus.setStatus("Unknown");
+            System.out.println(e.getMessage());
+            return mailCourseStatus;
         }
 
         Optional<CourseStatus> courseStatus = courseStatusRepository.findCourseStatusByStudentIdAndCourseId(student.getId(), course.getId());
-        data[2] = String.valueOf(courseStatus);
+
         if (courseStatus.isPresent()) {
-            strings[2] = courseStatus.get().getStatus();
+            mailCourseStatus.setStatus(courseStatus.get().getStatus());
         } else {
-            strings[2] = "Unknown";
+            mailCourseStatus.setStatus("Unknown");
+            Logger.getLogger(CourseStatusService.class.getName()).log(
+                    Level.INFO, "Course status not found.");
         }
-        return strings;
+        return mailCourseStatus;
     }
 }

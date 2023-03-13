@@ -1,22 +1,17 @@
 package nl.codegorilla.sap.model;
 
+import com.opencsv.bean.CsvBindByName;
+
 public class MailCourseStatus {
 
+    @CsvBindByName
     private String email;
 
-    private String courseName;
-    private String courseStatus;
+    @CsvBindByName
+    private String course;
 
-    public MailCourseStatus(String email, String courseName) {
-        this.email = email;
-        this.courseName = courseName;
-    }
-
-
-    // courseName is optional so this constructor will be used when it is not given/found
-    public MailCourseStatus(String email) {
-        this.email = email;
-    }
+    @CsvBindByName
+    private String status;
 
     public String getEmail() {
         return email;
@@ -26,19 +21,28 @@ public class MailCourseStatus {
         this.email = email;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public String getCourse() {
+        return course;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setCourse(String course) {
+        this.course = course;
     }
 
-    public String getCourseStatus() {
-        return courseStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCourseStatus(String courseStatus) {
-        this.courseStatus = courseStatus;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "MailCourseStatus{" +
+                "email='" + email + '\'' +
+                ", course='" + course + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

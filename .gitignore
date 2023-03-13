@@ -9,3 +9,6 @@ target
 
 # Dev Environment Files
 src/main/resources/application-dev.yml
+
+# Temporary CSV
+*.csv
