@@ -5,6 +5,7 @@ import com.opencsv.bean.*;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import nl.codegorilla.sap.exception.InvalidFileException;
+import nl.codegorilla.sap.exception.ServerException;
 import nl.codegorilla.sap.model.MailCourseStatus;
 import nl.codegorilla.sap.service.CourseStatusService;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static nl.codegorilla.sap.utility.Utility.getAllFieldsAsStringArray;
 
 @Service
 public class CsvHandler implements FileHandler {
@@ -34,13 +35,9 @@ public class CsvHandler implements FileHandler {
 
         List<MailCourseStatus> updatedList = new ArrayList<>();
 
-        // check if null
-
         for (MailCourseStatus mailCourseStatus : list) {
             updatedList.add(courseStatusService.csvCheck(mailCourseStatus));
         }
-
-        // check if exception happened
 
         return write(updatedList);
     }
@@ -64,12 +61,13 @@ public class CsvHandler implements FileHandler {
 
             list = csvToBean.parse();
 
+
             for (MailCourseStatus mailCourseStatus : list) {
                 mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
                 mailCourseStatus.setCourse(mailCourseStatus.getCourse().trim());
             }
 
-            list.forEach(System.out::println);
+//            list.forEach(System.out::println);
 
             return list;
 
@@ -82,23 +80,34 @@ public class CsvHandler implements FileHandler {
     public String write(List<MailCourseStatus> list) {
         String path = "temp.csv";
         Path myPath = Paths.get(path);
+        String[] headers = getAllFieldsAsStringArray(MailCourseStatus.class);
 
-        try (BufferedWriter writer = Files.newBufferedWriter(myPath, StandardCharsets.UTF_8)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(myPath, StandardCharsets.UTF_8);
+             CSVWriter csvWriter = new CSVWriter(writer)) {
+
+            csvWriter.writeNext(headers);
+
+            ColumnPositionMappingStrategy<MailCourseStatus> mappingStrategy = new ColumnPositionMappingStrategy<>();
+            mappingStrategy.setType(MailCourseStatus.class);
+            mappingStrategy.setColumnMapping(headers);
 
             StatefulBeanToCsv<MailCourseStatus> beanToCsv = new StatefulBeanToCsvBuilder<MailCourseStatus>(writer)
-                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                    .withMappingStrategy(mappingStrategy)
                     .build();
 
             beanToCsv.write(list);
+
             return path;
 
-        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException |
-                 IOException ex) {
-            Logger.getLogger(CsvHandler.class.getName()).log(
-                    Level.SEVERE, ex.getMessage(), ex);
-            return "Exception";
+        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+            System.out.println(e.getMessage());
+            throw new ServerException("Csv stuff went wrong");
+        } catch (IOException e) {
+            throw new ServerException("An IOException occurred on the server");
         }
     }
+
+
 }
 
 

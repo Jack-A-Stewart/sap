@@ -11,23 +11,27 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<ErrorDetails> handleMyCustomException(StudentNotFoundException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage());
+    public ResponseEntity<ErrorDetails> handleMyCustomException(StudentNotFoundException e) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), e.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CourseNotFoundException.class)
-    public ResponseEntity<ErrorDetails> handleMyCustomException(CourseNotFoundException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage());
+    public ResponseEntity<ErrorDetails> handleMyCustomException(CourseNotFoundException e) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), e.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidFileException.class)
-    public ResponseEntity<ErrorDetails> handleMyCustomException(InvalidFileException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage());
+    public ResponseEntity<ErrorDetails> handleMyCustomException(InvalidFileException e) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), e.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-
+    @ExceptionHandler(ServerException.class)
+    public ResponseEntity<ErrorDetails> handleMyCustomException(ServerException e) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), e.getMessage());
+        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 

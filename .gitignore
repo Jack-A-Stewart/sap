@@ -7,8 +7,5 @@ target
 # IDE Files
 .idea
 
-# Dev Environment Files
-src/main/resources/application-dev.yml
-
 # Temporary CSV
 *.csv
