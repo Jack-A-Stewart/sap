@@ -120,12 +120,20 @@ public class CourseStatusService {
     }
 
     public List<MailCourseStatus> csvCheckMultipleCourses(MailCourseStatus mailCourseStatus) {
-        Student student;
-        List<CourseStatus> list;
+        Student student = new Student();
+        List<CourseStatus> list = new ArrayList<>();
         List<MailCourseStatus> mailCourseStatuses = new ArrayList<>();
 
-        student = studentService.findStudentByEmail(mailCourseStatus.getEmail());
-        list = courseStatusRepository.findAllByStudentId(student.getId());
+        try {
+            student = studentService.findStudentByEmail(mailCourseStatus.getEmail());
+            list = courseStatusRepository.findAllByStudentId(student.getId());
+        } catch (StudentNotFoundException | CourseNotFoundException e) {
+            mailCourseStatus.setStatus("Unknown");
+            System.out.println(e.getMessage());
+            mailCourseStatuses.add(mailCourseStatus);
+            return mailCourseStatuses;
+        }
+
 
         for (CourseStatus courseStatus : list) {
             MailCourseStatus mailCourseStatus1 = new MailCourseStatus();
