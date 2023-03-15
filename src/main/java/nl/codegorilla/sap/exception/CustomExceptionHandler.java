@@ -25,7 +25,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(InvalidFileException.class)
     public ResponseEntity<ErrorDetails> handleMyCustomException(InvalidFileException e) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), e.getMessage());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ServerException.class)

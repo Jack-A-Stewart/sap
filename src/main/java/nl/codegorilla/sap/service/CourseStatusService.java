@@ -118,4 +118,24 @@ public class CourseStatusService {
         }
         return mailCourseStatus;
     }
+
+    public List<MailCourseStatus> csvCheckMultipleCourses(MailCourseStatus mailCourseStatus) {
+        Student student;
+        List<CourseStatus> list;
+        List<MailCourseStatus> mailCourseStatuses = new ArrayList<>();
+
+        student = studentService.findStudentByEmail(mailCourseStatus.getEmail());
+        list = courseStatusRepository.findAllByStudentId(student.getId());
+
+        for (CourseStatus courseStatus : list) {
+            MailCourseStatus mailCourseStatus1 = new MailCourseStatus();
+            mailCourseStatus1.setEmail(student.getEmail());
+            mailCourseStatus1.setCourse(courseService.findCourseById(courseStatus.getId().getCourseId()).getName());
+            mailCourseStatus1.setStatus(courseStatus.getStatus());
+            mailCourseStatuses.add(mailCourseStatus1);
+
+        }
+        return mailCourseStatuses;
+    }
+
 }

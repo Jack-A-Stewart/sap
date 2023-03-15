@@ -45,8 +45,12 @@ public class CsvHandler implements FileHandler {
             trimmedList = trimSpaceMail(list);
 
             // do mail only things
+            List<MailCourseStatus> updatedMailList = new ArrayList<>();
 
-            return "Still have to do this part";
+            for (MailCourseStatus mailCourseStatus : trimmedList) {
+                updatedMailList.addAll(courseStatusService.csvCheckMultipleCourses(mailCourseStatus));
+            }
+            return write(updatedMailList);
 
         } else {
             // If a .csv file contains both an Email and Course
@@ -76,7 +80,6 @@ public class CsvHandler implements FileHandler {
         }
         return list;
     }
-
 
 
     public List<MailCourseStatus> read(MultipartFile file) {
