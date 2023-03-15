@@ -33,14 +33,51 @@ public class CsvHandler implements FileHandler {
     public String csvHandler(MultipartFile file) {
         List<MailCourseStatus> list = read(file);
 
-        List<MailCourseStatus> updatedList = new ArrayList<>();
+        List<MailCourseStatus> trimmedList;
 
-        for (MailCourseStatus mailCourseStatus : list) {
-            updatedList.add(courseStatusService.csvCheck(mailCourseStatus));
+        if (list.get(0).getEmail() == null) {
+            throw new InvalidFileException("This file doesn't contain an email address");
         }
 
-        return write(updatedList);
+        if (list.get(0).getCourse() == null) {
+            // If a .csv contains only a mail address
+
+            trimmedList = trimSpaceMail(list);
+
+            // do mail only things
+
+            return "Still have to do this part";
+
+        } else {
+            // If a .csv file contains both an Email and Course
+
+            trimmedList = trimSpaceMailCourse(list);
+            List<MailCourseStatus> updatedList = new ArrayList<>();
+
+            for (MailCourseStatus mailCourseStatus : trimmedList) {
+                updatedList.add(courseStatusService.csvCheck(mailCourseStatus));
+            }
+            return write(updatedList);
+        }
     }
+
+
+    public List<MailCourseStatus> trimSpaceMail(List<MailCourseStatus> list) {
+        for (MailCourseStatus mailCourseStatus : list) {
+            mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
+        }
+        return list;
+    }
+
+    public List<MailCourseStatus> trimSpaceMailCourse(List<MailCourseStatus> list) {
+        for (MailCourseStatus mailCourseStatus : list) {
+            mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
+            mailCourseStatus.setCourse(mailCourseStatus.getCourse().trim());
+        }
+        return list;
+    }
+
+
 
     public List<MailCourseStatus> read(MultipartFile file) {
 
@@ -60,12 +97,6 @@ public class CsvHandler implements FileHandler {
                     .build();
 
             list = csvToBean.parse();
-
-
-            for (MailCourseStatus mailCourseStatus : list) {
-                mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
-                mailCourseStatus.setCourse(mailCourseStatus.getCourse().trim());
-            }
 
 //            list.forEach(System.out::println);
 
