@@ -120,8 +120,8 @@ public class CourseStatusService {
     }
 
     public List<MailCourseStatus> csvCheckMultipleCourses(MailCourseStatus mailCourseStatus) {
-        Student student = new Student();
-        List<CourseStatus> list = new ArrayList<>();
+        Student student;
+        List<CourseStatus> list;
         List<MailCourseStatus> mailCourseStatuses = new ArrayList<>();
 
         try {
@@ -129,6 +129,7 @@ public class CourseStatusService {
             list = courseStatusRepository.findAllByStudentId(student.getId());
         } catch (StudentNotFoundException | CourseNotFoundException e) {
             mailCourseStatus.setStatus("Unknown");
+            mailCourseStatus.setCourse("Unknown");
             System.out.println(e.getMessage());
             mailCourseStatuses.add(mailCourseStatus);
             return mailCourseStatuses;

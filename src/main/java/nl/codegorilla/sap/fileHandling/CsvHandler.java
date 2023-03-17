@@ -44,7 +44,6 @@ public class CsvHandler implements FileHandler {
 
             trimmedList = trimSpaceMail(list);
 
-            // do mail only things
             List<MailCourseStatus> updatedMailList = new ArrayList<>();
 
             for (MailCourseStatus mailCourseStatus : trimmedList) {
@@ -135,7 +134,7 @@ public class CsvHandler implements FileHandler {
 
         } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             System.out.println(e.getMessage());
-            throw new ServerException("Csv stuff went wrong");
+            throw new ServerException("The CSV file could not be read");
         } catch (IOException e) {
             throw new ServerException("An IOException occurred on the server");
         }
