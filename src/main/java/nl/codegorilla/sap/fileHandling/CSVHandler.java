@@ -7,7 +7,6 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import nl.codegorilla.sap.exception.InvalidFileException;
 import nl.codegorilla.sap.exception.ServerException;
 import nl.codegorilla.sap.model.MailCourseStatus;
-import nl.codegorilla.sap.service.CourseStatusService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,64 +21,7 @@ import java.util.List;
 import static nl.codegorilla.sap.utility.Utility.getAllFieldsAsStringArray;
 
 @Service
-public class CsvHandler implements FileHandler {
-
-    private final CourseStatusService courseStatusService;
-
-    public CsvHandler(CourseStatusService courseStatusService) {
-        this.courseStatusService = courseStatusService;
-    }
-
-    public String csvHandler(MultipartFile file) {
-        List<MailCourseStatus> list = read(file);
-
-        List<MailCourseStatus> trimmedList;
-
-        if (list.get(0).getEmail() == null) {
-            throw new InvalidFileException("This file doesn't contain an email address");
-        }
-
-        if (list.get(0).getCourse() == null) {
-            // If a .csv contains only a mail address
-
-            trimmedList = trimSpaceMail(list);
-
-            List<MailCourseStatus> updatedMailList = new ArrayList<>();
-
-            for (MailCourseStatus mailCourseStatus : trimmedList) {
-                updatedMailList.addAll(courseStatusService.csvCheckMultipleCourses(mailCourseStatus));
-            }
-            return write(updatedMailList);
-
-        } else {
-            // If a .csv file contains both an Email and Course
-
-            trimmedList = trimSpaceMailCourse(list);
-            List<MailCourseStatus> updatedList = new ArrayList<>();
-
-            for (MailCourseStatus mailCourseStatus : trimmedList) {
-                updatedList.add(courseStatusService.csvCheck(mailCourseStatus));
-            }
-            return write(updatedList);
-        }
-    }
-
-
-    public List<MailCourseStatus> trimSpaceMail(List<MailCourseStatus> list) {
-        for (MailCourseStatus mailCourseStatus : list) {
-            mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
-        }
-        return list;
-    }
-
-    public List<MailCourseStatus> trimSpaceMailCourse(List<MailCourseStatus> list) {
-        for (MailCourseStatus mailCourseStatus : list) {
-            mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
-            mailCourseStatus.setCourse(mailCourseStatus.getCourse().trim());
-        }
-        return list;
-    }
-
+public class CSVHandler implements FileHandler {
 
     public List<MailCourseStatus> read(MultipartFile file) {
 
@@ -100,9 +42,24 @@ public class CsvHandler implements FileHandler {
 
             list = csvToBean.parse();
 
-//            list.forEach(System.out::println);
+            List<MailCourseStatus> trimmedList;
 
-            return list;
+            if (list.get(0).getEmail() == null) {
+                throw new InvalidFileException("This file doesn't contain an email address");
+            }
+
+            if (list.get(0).getCourse() == null) {
+                // If a .csv contains only a mail address
+
+                trimmedList = trimSpaceMail(list);
+
+            } else {
+                // If a .csv file contains both an Email and Course
+
+                trimmedList = trimSpaceMailCourse(list);
+            }
+
+            return trimmedList;
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -138,6 +95,21 @@ public class CsvHandler implements FileHandler {
         } catch (IOException e) {
             throw new ServerException("An IOException occurred on the server");
         }
+    }
+
+    public List<MailCourseStatus> trimSpaceMail(List<MailCourseStatus> list) {
+        for (MailCourseStatus mailCourseStatus : list) {
+            mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
+        }
+        return list;
+    }
+
+    public List<MailCourseStatus> trimSpaceMailCourse(List<MailCourseStatus> list) {
+        for (MailCourseStatus mailCourseStatus : list) {
+            mailCourseStatus.setEmail(mailCourseStatus.getEmail().trim());
+            mailCourseStatus.setCourse(mailCourseStatus.getCourse().trim());
+        }
+        return list;
     }
 
 

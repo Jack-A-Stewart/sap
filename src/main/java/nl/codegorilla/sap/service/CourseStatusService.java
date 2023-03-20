@@ -93,7 +93,7 @@ public class CourseStatusService {
         return courseNameStatusList;
     }
 
-    public MailCourseStatus csvCheck(MailCourseStatus mailCourseStatus) {
+    public MailCourseStatus addStatus(MailCourseStatus mailCourseStatus) {
 
         Student student;
         Course course;

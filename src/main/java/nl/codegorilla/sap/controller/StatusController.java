@@ -1,9 +1,9 @@
 package nl.codegorilla.sap.controller;
 
 
-import nl.codegorilla.sap.fileHandling.CsvHandler;
 import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
 import nl.codegorilla.sap.service.CourseStatusService;
+import nl.codegorilla.sap.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -21,17 +21,19 @@ import java.nio.file.Paths;
 @RestController
 @CrossOrigin()
 @RequestMapping("/check")
-public class IsGraduatedController {
+public class StatusController {
 
     private final CourseStatusService courseStatusService;
-    private final CsvHandler csvHandler;
+
+    private final FileService fileService;
 
 
     @Autowired
-    public IsGraduatedController(CourseStatusService courseStatusService, CsvHandler csvHandler) {
+    public StatusController(CourseStatusService courseStatusService, FileService fileService) {
         this.courseStatusService = courseStatusService;
-        this.csvHandler = csvHandler;
+        this.fileService = fileService;
     }
+
 
     /**
      * @param courseStatusInput necessary parameters to check the status of a student/course
@@ -42,15 +44,15 @@ public class IsGraduatedController {
         return new ResponseEntity<>(courseStatusService.isGraduated(courseStatusInput), HttpStatus.OK);
     }
 
-    @PostMapping("/csv")
-    public ResponseEntity<?> csv(@RequestParam("file") MultipartFile file) {
-        String path = csvHandler.csvHandler(file);
+    @PostMapping("/upload")
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) {
+        String path = fileService.process(file);
 
         try {
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(Paths.get(path)));
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + path);
-            headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+            headers.add(HttpHeaders.CONTENT_TYPE, file.getContentType());
 
             return ResponseEntity.ok()
                     .headers(headers)
