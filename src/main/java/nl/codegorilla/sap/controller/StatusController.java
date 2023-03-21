@@ -1,6 +1,7 @@
 package nl.codegorilla.sap.controller;
 
 
+import nl.codegorilla.sap.exception.InvalidFileException;
 import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
 import nl.codegorilla.sap.service.CourseStatusService;
 import nl.codegorilla.sap.service.FileService;
@@ -62,7 +63,7 @@ public class StatusController {
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            throw new RuntimeException(e);
+            throw new InvalidFileException("Something went wrong with reading/writing the file");
         }
     }
 }

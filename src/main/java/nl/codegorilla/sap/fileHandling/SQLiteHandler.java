@@ -8,6 +8,7 @@ import java.util.List;
 public class SQLiteHandler implements FileHandler{
     @Override
     public List<MailCourseStatus> read(MultipartFile file) {
+
         return null;
     }
 

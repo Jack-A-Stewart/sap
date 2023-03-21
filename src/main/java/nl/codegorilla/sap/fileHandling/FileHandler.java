@@ -7,8 +7,5 @@ import java.util.List;
 
 public interface FileHandler {
     List<MailCourseStatus> read(MultipartFile file);
-
-    String write(List<MailCourseStatus> list);
-
+    String write(List<MailCourseStatus> data);
 }
-

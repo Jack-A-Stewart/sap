@@ -3,11 +3,13 @@ package nl.codegorilla.sap.service;
 import nl.codegorilla.sap.fileHandling.FileHandler;
 import nl.codegorilla.sap.fileHandling.FileHandlerFactory;
 import nl.codegorilla.sap.model.MailCourseStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class FileService {
 
     private final CourseStatusService courseStatusService;
