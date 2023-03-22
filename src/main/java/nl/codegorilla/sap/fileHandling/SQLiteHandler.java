@@ -36,16 +36,21 @@ public class SQLiteHandler implements FileHandler {
         File temp = new File(path);
 
         boolean deleted = false;
-
         if (temp.exists()) {
             deleted = temp.delete();
+            System.out.println("File deleted: " + deleted);
         }
-
         if (!deleted) {
             throw new ServerException("Something went wrong on the server");
         }
 
-
+        boolean created;
+        try {
+            created = temp.createNewFile();
+            System.out.println("File created: " + created);
+        } catch (IOException e) {
+            throw new ServerException("Something went wrong on the server");
+        }
 
         try (OutputStream os = new FileOutputStream(temp)) {
             os.write(file.getBytes());
