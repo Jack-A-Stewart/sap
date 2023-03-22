@@ -50,12 +50,10 @@ public class CSVHandler implements FileHandler {
 
             if (list.get(0).getCourse() == null) {
                 // If a .csv contains only a mail address
-
                 trimmedList = trimSpaceMail(list);
 
             } else {
                 // If a .csv file contains both an Email and Course
-
                 trimmedList = trimSpaceMailCourse(list);
             }
 

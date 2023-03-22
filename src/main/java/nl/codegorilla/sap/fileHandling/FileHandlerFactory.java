@@ -12,10 +12,10 @@ public class FileHandlerFactory {
             case "text/csv" -> {
                 return new CSVHandler();
             }
-            case "sql" -> {
+            case "application/octet-stream" -> {
                 return new SQLiteHandler();
             }
-            default -> throw new InvalidFileException("Cannot get file type : " + type);
+            default -> throw new InvalidFileException("Incorrect file type: " + type);
         }
     }
 }

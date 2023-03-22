@@ -34,6 +34,7 @@ public class FileService {
         for (MailCourseStatus mailCourseStatus : list) {
             updatedList.add(courseStatusService.addStatus(mailCourseStatus));
         }
+
         return fileHandler.write(updatedList);
     }
 }
