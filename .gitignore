@@ -6,6 +6,3 @@ target
 
 # IDE Files
 .idea
-
-# Temporary CSV
-*.csv

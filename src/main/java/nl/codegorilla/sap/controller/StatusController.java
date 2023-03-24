@@ -43,6 +43,7 @@ public class StatusController {
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) throws IOException {
         String path = fileService.process(file);
-        return fileService.createResponse(path, file);
+        String type = file.getContentType();
+        return fileService.createResponse(path, type);
     }
 }
