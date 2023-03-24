@@ -9,10 +9,10 @@ public class FileHandlerFactory {
             return null;
         }
         switch (type) {
-            case "text/csv" -> {
+            case "csv" -> {
                 return new CSVHandler();
             }
-            case "application/octet-stream" -> {
+            case "db" -> {
                 return new SQLiteHandler();
             }
             default -> throw new InvalidFileException("Incorrect file type: " + type);

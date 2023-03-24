@@ -4,6 +4,7 @@ import nl.codegorilla.sap.exception.ServerException;
 import nl.codegorilla.sap.fileHandling.FileHandler;
 import nl.codegorilla.sap.fileHandling.FileHandlerFactory;
 import nl.codegorilla.sap.model.MailCourseStatus;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -29,7 +30,8 @@ public class FileService {
     }
 
     public String process(MultipartFile file) {
-        String type = file.getContentType();
+        String filename = file.getOriginalFilename();
+        String type = FilenameUtils.getExtension(filename);
 
         List<MailCourseStatus> list;
 
