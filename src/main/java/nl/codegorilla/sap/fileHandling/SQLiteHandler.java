@@ -62,12 +62,13 @@ public class SQLiteHandler implements FileHandler {
 
     @Override
     public String write(List<MailCourseStatus> list) {
-        String sql = "INSERT INTO MailCourse (status) VALUES (?)";
+        String sql = "UPDATE MailCourse SET status = ? WHERE email = ?";
         dataSource.setUrl(url);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             for (MailCourseStatus mailCourseStatus : list) {
                 ps.setString(1, mailCourseStatus.getStatus());
+                ps.setString(2, mailCourseStatus.getEmail());
                 ps.addBatch();
             }
             ps.executeBatch();
