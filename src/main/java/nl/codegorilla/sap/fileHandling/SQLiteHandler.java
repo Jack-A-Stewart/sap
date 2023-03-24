@@ -1,7 +1,6 @@
 package nl.codegorilla.sap.fileHandling;
 
 import nl.codegorilla.sap.exception.InvalidFileException;
-import nl.codegorilla.sap.exception.ServerException;
 import nl.codegorilla.sap.model.MailCourseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.sqlite.SQLiteDataSource;
@@ -30,27 +29,8 @@ public class SQLiteHandler implements FileHandler {
         this.url = "jdbc:sqlite:" + file.getOriginalFilename();
         this.path = file.getOriginalFilename();
 
-
-
         assert path != null;
         File temp = new File(path);
-
-        boolean deleted = false;
-        if (temp.exists()) {
-            deleted = temp.delete();
-            System.out.println("File deleted: " + deleted);
-        }
-        if (!deleted) {
-            throw new ServerException("Something went wrong on the server");
-        }
-
-        boolean created;
-        try {
-            created = temp.createNewFile();
-            System.out.println("File created: " + created);
-        } catch (IOException e) {
-            throw new ServerException("Something went wrong on the server");
-        }
 
         try (OutputStream os = new FileOutputStream(temp)) {
             os.write(file.getBytes());

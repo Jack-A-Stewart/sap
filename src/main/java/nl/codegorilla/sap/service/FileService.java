@@ -1,11 +1,20 @@
 package nl.codegorilla.sap.service;
 
+import nl.codegorilla.sap.exception.ServerException;
 import nl.codegorilla.sap.fileHandling.FileHandler;
 import nl.codegorilla.sap.fileHandling.FileHandlerFactory;
 import nl.codegorilla.sap.model.MailCourseStatus;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +43,38 @@ public class FileService {
         for (MailCourseStatus mailCourseStatus : list) {
             updatedList.add(courseStatusService.addStatus(mailCourseStatus));
         }
-
         return fileHandler.write(updatedList);
     }
+
+
+    public ResponseEntity<?> createResponse(String filePath, MultipartFile file) throws IOException {
+        Path path = Paths.get(filePath);
+        try {
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + path);
+            headers.add(HttpHeaders.CONTENT_TYPE, file.getContentType());
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(resource.contentLength())
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .body(resource);
+
+        } catch (IOException e) {
+            throw new ServerException("Something went wrong on the server");
+        } finally {
+            Files.delete(path);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 }
