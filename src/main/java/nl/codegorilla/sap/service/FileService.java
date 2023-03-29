@@ -57,7 +57,7 @@ public class FileService {
     }
 
 
-    public ResponseEntity<?> createResponse(String filePath) {
+    public ResponseEntity<ByteArrayResource> createResponse(String filePath) {
         Path path = Paths.get(filePath);
         String type = "";
 

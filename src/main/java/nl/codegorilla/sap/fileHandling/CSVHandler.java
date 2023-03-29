@@ -20,6 +20,7 @@ import java.util.List;
 
 import static nl.codegorilla.sap.utility.Utility.getAllFieldsAsStringArray;
 
+
 @Service
 public class CSVHandler implements FileHandler {
 
