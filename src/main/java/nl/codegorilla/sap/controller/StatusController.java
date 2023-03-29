@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin()
-@RequestMapping("/check")
+@RequestMapping()
 public class StatusController {
 
     private final CourseStatusService courseStatusService;
@@ -34,7 +34,7 @@ public class StatusController {
      * @param courseStatusInput necessary parameters to check the status of a student/course
      * @return True if student has graduated that course and false for anything else
      */
-    @PostMapping("/single")
+    @PostMapping("/check")
     public ResponseEntity<?> isGraduated(@RequestBody CourseStatusInputDTO courseStatusInput) {
         return new ResponseEntity<>(courseStatusService.isGraduated(courseStatusInput), HttpStatus.OK);
     }
