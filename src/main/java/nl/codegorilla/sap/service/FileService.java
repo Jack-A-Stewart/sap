@@ -57,9 +57,17 @@ public class FileService {
     }
 
 
-    public ResponseEntity<?> createResponse(String filePath) throws IOException {
+    public ResponseEntity<?> createResponse(String filePath) {
         Path path = Paths.get(filePath);
-        String type = Files.probeContentType(path);
+        String type = "";
+
+        try {
+            type = Files.probeContentType(path);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+
         try {
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
             HttpHeaders headers = new HttpHeaders();
@@ -74,10 +82,13 @@ public class FileService {
         } catch (IOException e) {
             throw new ServerException("Something went wrong on the server");
         } finally {
-            Files.delete(path);
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
     }
-
 
 }

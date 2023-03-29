@@ -5,10 +5,17 @@ import nl.codegorilla.sap.model.MailCourseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.sqlite.SQLiteDataSource;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SQLiteHandler implements FileHandler {
 
@@ -19,17 +26,15 @@ public class SQLiteHandler implements FileHandler {
     String path = "";
 
     public SQLiteHandler() {
-        this.dataSource = new SQLiteDataSource();
+        dataSource = new SQLiteDataSource();
     }
 
     @Override
     public List<MailCourseStatus> read(MultipartFile file) {
         if (file.isEmpty()) throw new InvalidFileException("File is empty");
+        setFile();
+        dataSource.setUrl(url);
 
-        this.url = "jdbc:sqlite:" + file.getOriginalFilename();
-        this.path = file.getOriginalFilename();
-
-        assert path != null;
         File temp = new File(path);
 
         try (OutputStream os = new FileOutputStream(temp)) {
@@ -41,7 +46,7 @@ public class SQLiteHandler implements FileHandler {
         List<MailCourseStatus> list = new ArrayList<>();
         String sql = "SELECT * FROM MailCourse";
 
-        dataSource.setUrl(url);
+
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(sql);
@@ -55,6 +60,12 @@ public class SQLiteHandler implements FileHandler {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            try {
+                Files.delete(Paths.get(path));
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
         return list;
     }
@@ -62,13 +73,19 @@ public class SQLiteHandler implements FileHandler {
 
     @Override
     public String write(List<MailCourseStatus> list) {
-        String sql = "UPDATE MailCourse SET status = ? WHERE email = ?";
+        String sql = "INSERT INTO MailCourse (email, course, status) VALUES (?, ?, ?)";
+        setFile();
         dataSource.setUrl(url);
+
+        createNewDatabase();
+        initialiseDB();
+
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             for (MailCourseStatus mailCourseStatus : list) {
-                ps.setString(1, mailCourseStatus.getStatus());
-                ps.setString(2, mailCourseStatus.getEmail());
+                ps.setString(1, mailCourseStatus.getEmail());
+                ps.setString(2, mailCourseStatus.getCourse());
+                ps.setString(3, mailCourseStatus.getStatus());
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -77,4 +94,40 @@ public class SQLiteHandler implements FileHandler {
         }
         return path;
     }
+
+    private void setFile() {
+        this.path = "temp.db";
+
+        this.url = "jdbc:sqlite:temp.db";
+    }
+
+    public void createNewDatabase() {
+        try (Connection conn = DriverManager.getConnection(dataSource.getUrl())) {
+            if (conn != null) {
+                DatabaseMetaData meta = conn.getMetaData();
+                Logger.getLogger(SQLiteHandler.class.getName()).log(Level.INFO, "The driver name is " + meta.getDriverName());
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void initialiseDB() {
+        String sql = """
+                CREATE TABLE IF NOT EXISTS MailCourse (
+                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 email TEXT,
+                 course TEXT,
+                 status TEXT
+                );""";
+        try (Connection connection = this.dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            Logger.getLogger(SQLiteHandler.class.getName()).log(Level.WARNING, "Database creation failed...");
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

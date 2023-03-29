@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 
 @RestController
 @CrossOrigin()
@@ -46,7 +44,7 @@ public class StatusController {
 
 
     @GetMapping("/download/{type}")
-    public ResponseEntity<?> download(@PathVariable("type") String type) throws IOException {
+    public ResponseEntity<?> download(@PathVariable("type") String type) {
         String path = fileService.processOutput(type);
         return fileService.createResponse(path);
     }
