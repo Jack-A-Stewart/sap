@@ -27,6 +27,7 @@ public class FileService {
 
     public FileService(CourseStatusService courseStatusService) {
         this.courseStatusService = courseStatusService;
+        statusList = new ArrayList<>();
     }
 
 
@@ -41,8 +42,6 @@ public class FileService {
 
         list = fileHandler.read(file);
 
-        statusList = new ArrayList<>();
-
         for (MailCourseStatus mailCourseStatus : list) {
             statusList.add(courseStatusService.addStatus(mailCourseStatus));
         }
@@ -50,6 +49,9 @@ public class FileService {
     }
 
     public String processOutput(String type) {
+        if (statusList.isEmpty()) {
+            throw new ServerException("There is no available data.");
+        }
         FileHandlerFactory fileHandlerFactory = new FileHandlerFactory();
         FileHandler fileHandler = fileHandlerFactory.createFileHandler(type);
 
