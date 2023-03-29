@@ -23,12 +23,14 @@ public class FileService {
 
     private final CourseStatusService courseStatusService;
 
+    List<MailCourseStatus> statusList;
 
     public FileService(CourseStatusService courseStatusService) {
         this.courseStatusService = courseStatusService;
     }
 
-    public String process(MultipartFile file) {
+
+    public List<String> processInput(MultipartFile file) {
         String filename = file.getOriginalFilename();
         String type = FilenameUtils.getExtension(filename);
 
@@ -39,17 +41,25 @@ public class FileService {
 
         list = fileHandler.read(file);
 
-        List<MailCourseStatus> updatedList = new ArrayList<>();
+        statusList = new ArrayList<>();
 
         for (MailCourseStatus mailCourseStatus : list) {
-            updatedList.add(courseStatusService.addStatus(mailCourseStatus));
+            statusList.add(courseStatusService.addStatus(mailCourseStatus));
         }
-        return fileHandler.write(updatedList);
+        return List.of("csv", "db");
+    }
+
+    public String processOutput(String type) {
+        FileHandlerFactory fileHandlerFactory = new FileHandlerFactory();
+        FileHandler fileHandler = fileHandlerFactory.createFileHandler(type);
+
+        return fileHandler.write(statusList);
     }
 
 
-    public ResponseEntity<?> createResponse(String filePath, String type) throws IOException {
+    public ResponseEntity<?> createResponse(String filePath) throws IOException {
         Path path = Paths.get(filePath);
+        String type = Files.probeContentType(path);
         try {
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
             HttpHeaders headers = new HttpHeaders();
@@ -68,14 +78,6 @@ public class FileService {
         }
 
     }
-
-
-
-
-
-
-
-
 
 
 }

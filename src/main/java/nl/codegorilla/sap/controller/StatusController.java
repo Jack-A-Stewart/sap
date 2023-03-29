@@ -6,7 +6,6 @@ import nl.codegorilla.sap.service.CourseStatusService;
 import nl.codegorilla.sap.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,9 +40,15 @@ public class StatusController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) throws IOException {
-        String path = fileService.process(file);
-        String type = file.getContentType();
-        return fileService.createResponse(path, type);
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok().body(fileService.processInput(file));
     }
+
+
+    @GetMapping("/download/{type}")
+    public ResponseEntity<?> download(@PathVariable("type") String type) throws IOException {
+        String path = fileService.processOutput(type);
+        return fileService.createResponse(path);
+    }
+
 }
