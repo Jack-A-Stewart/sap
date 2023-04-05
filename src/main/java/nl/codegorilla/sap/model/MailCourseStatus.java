@@ -8,10 +8,11 @@ import jakarta.persistence.Id;
 public class MailCourseStatus {
 
     @CsvBindByName
+    @Id
     private String email;
 
     @CsvBindByName
-    @Id
+
     private String course;
 
     @CsvBindByName

@@ -12,12 +12,12 @@ public class FileData {
     @Column(nullable = false, updatable = false, name = "id")
     private long id;
 
-    private long sessionId;
+    private String sessionId;
 
     @OneToMany
     private List<MailCourseStatus> statusList;
 
-    public FileData(long id, long sessionId, List<MailCourseStatus> statusList) {
+    public FileData(long id, String sessionId, List<MailCourseStatus> statusList) {
         this.id = id;
         this.sessionId = sessionId;
         this.statusList = statusList;
@@ -35,11 +35,11 @@ public class FileData {
         this.id = id;
     }
 
-    public long getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(long sessionId) {
+    public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
 

@@ -1,6 +1,7 @@
 package nl.codegorilla.sap.controller;
 
 
+import jakarta.servlet.http.HttpSession;
 import nl.codegorilla.sap.model.dto.CourseStatusInputDTO;
 import nl.codegorilla.sap.model.dto.MailStatusDTO;
 import nl.codegorilla.sap.service.CourseStatusService;
@@ -43,14 +44,15 @@ public class StatusController {
 
 
     @PostMapping("/upload")
-    public ResponseEntity<List<String>> upload(@RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok().body(fileService.processInput(file));
+    public ResponseEntity<List<String>> upload(@RequestParam("file") MultipartFile file, HttpSession session) {
+
+        return ResponseEntity.ok().body(fileService.processInput(file, session));
     }
 
 
     @GetMapping("/download/{type}")
-    public ResponseEntity<ByteArrayResource> download(@PathVariable("type") String type) {
-        String path = fileService.processOutput(type);
+    public ResponseEntity<ByteArrayResource> download(@PathVariable("type") String type, HttpSession session) {
+        String path = fileService.processOutput(type, session.getId());
         return fileService.createResponse(path);
     }
 

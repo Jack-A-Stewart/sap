@@ -66,13 +66,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-
-//                        .requestMatchers("/h2-console/**").permitAll()
-//                        .requestMatchers("/token").permitAll()
-//                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .build();
     }

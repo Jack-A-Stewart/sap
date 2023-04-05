@@ -1,8 +1,10 @@
 package nl.codegorilla.sap.service;
 
+import jakarta.servlet.http.HttpSession;
 import nl.codegorilla.sap.exception.ServerException;
 import nl.codegorilla.sap.fileHandling.FileHandler;
 import nl.codegorilla.sap.fileHandling.FileHandlerFactory;
+import nl.codegorilla.sap.model.FileData;
 import nl.codegorilla.sap.model.MailCourseStatus;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.ByteArrayResource;
@@ -22,20 +24,22 @@ import java.util.List;
 public class FileService {
 
     private final CourseStatusService courseStatusService;
+    private final FileDataService fileDataService;
 
-    List<MailCourseStatus> statusList;
 
-    public FileService(CourseStatusService courseStatusService) {
+    public FileService(CourseStatusService courseStatusService, FileDataService fileDataService) {
         this.courseStatusService = courseStatusService;
-        statusList = new ArrayList<>();
+        this.fileDataService = fileDataService;
     }
 
 
-    public List<String> processInput(MultipartFile file) {
+    public List<String> processInput(MultipartFile file, HttpSession session) {
         String filename = file.getOriginalFilename();
         String type = FilenameUtils.getExtension(filename);
 
         List<MailCourseStatus> list;
+        List<MailCourseStatus> statusList = new ArrayList<>();
+
 
         FileHandlerFactory fileHandlerFactory = new FileHandlerFactory();
         FileHandler fileHandler = fileHandlerFactory.createFileHandler(type);
@@ -45,13 +49,17 @@ public class FileService {
         for (MailCourseStatus mailCourseStatus : list) {
             statusList.add(courseStatusService.addStatus(mailCourseStatus));
         }
+        FileData fileData = new FileData();
+        fileData.setSessionId(session.getId());
+        fileData.setStatusList(statusList);
+        fileDataService.saveFileData(fileData);
         return List.of("csv", "db");
     }
 
-    public String processOutput(String type) {
-        if (statusList.isEmpty()) {
-            throw new ServerException("There is no available data.");
-        }
+    public String processOutput(String type, String sessionId) {
+        FileData data = fileDataService.findFileDataBySessionId(sessionId);
+        List<MailCourseStatus> statusList = data.getStatusList();
+
         FileHandlerFactory fileHandlerFactory = new FileHandlerFactory();
         FileHandler fileHandler = fileHandlerFactory.createFileHandler(type);
 

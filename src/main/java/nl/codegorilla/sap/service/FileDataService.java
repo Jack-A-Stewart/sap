@@ -14,12 +14,18 @@ public class FileDataService {
         this.fileDataRepository = fileDataRepository;
     }
 
-    public FileData addFileData(FileData fileData) {
-        return fileDataRepository.save(fileData);
+    public void saveFileData(FileData fileData) {
+        fileDataRepository.save(fileData);
     }
 
     @Transactional
     public void deleteFileData(Long id) {
         fileDataRepository.deleteById(id);
     }
+
+    public FileData findFileDataBySessionId(String sessionId) {
+        return fileDataRepository.findFileDataBySessionId(sessionId);
+    }
+
+
 }
