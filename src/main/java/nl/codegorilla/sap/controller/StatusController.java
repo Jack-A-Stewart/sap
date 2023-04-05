@@ -49,7 +49,6 @@ public class StatusController {
         return ResponseEntity.ok().body(fileService.processInput(file, session));
     }
 
-
     @GetMapping("/download/{type}")
     public ResponseEntity<ByteArrayResource> download(@PathVariable("type") String type, HttpSession session) {
         String path = fileService.processOutput(type, session.getId());
