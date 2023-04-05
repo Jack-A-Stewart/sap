@@ -27,9 +27,8 @@ public class CourseController {
      * @return list of all courses
      */
     @GetMapping("/all")
-    public ResponseEntity<List<Course>> getAllCourses() {
-        List<Course> courses = courseService.findAllCourses();
-        return new ResponseEntity<>(courses, HttpStatus.OK);
+    public List<Course> getAllCourses() {
+        return courseService.findAllCourses();
     }
 
 

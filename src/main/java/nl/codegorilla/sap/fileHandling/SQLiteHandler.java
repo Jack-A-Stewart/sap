@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +37,8 @@ public class SQLiteHandler implements FileHandler {
         dataSource.setUrl(url);
 
         File temp = new File(path);
+        System.out.println(temp.getAbsolutePath());
+        System.out.println(temp.getName());
 
         try (OutputStream os = new FileOutputStream(temp)) {
             os.write(file.getBytes());
@@ -95,10 +98,22 @@ public class SQLiteHandler implements FileHandler {
         return path;
     }
 
-    private void setFile() {
-        this.path = "temp.db";
 
-        this.url = "jdbc:sqlite:temp.db";
+    public String generateRandomString(int length) {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random rand = new Random();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(CHARACTERS.charAt(rand.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
+    }
+
+    private void setFile() {
+        // must be different for each file
+        this.path = generateRandomString(6) + ".db";
+
+        this.url = "jdbc:sqlite:" + path;
     }
 
     public void createNewDatabase() {
