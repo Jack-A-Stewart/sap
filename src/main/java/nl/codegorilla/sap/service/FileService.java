@@ -1,6 +1,5 @@
 package nl.codegorilla.sap.service;
 
-import jakarta.servlet.http.HttpSession;
 import nl.codegorilla.sap.exception.ServerException;
 import nl.codegorilla.sap.fileHandling.FileHandler;
 import nl.codegorilla.sap.fileHandling.FileHandlerFactory;
@@ -33,7 +32,7 @@ public class FileService {
     }
 
 
-    public List<String> processInput(MultipartFile file, HttpSession session) {
+    public List<String> processInput(MultipartFile file, String sessionID) {
         String filename = file.getOriginalFilename();
         String type = FilenameUtils.getExtension(filename);
 
@@ -50,7 +49,7 @@ public class FileService {
             statusList.add(courseStatusService.addStatus(mailCourseStatus));
         }
         FileData fileData = new FileData();
-        fileData.setSessionId(session.getId());
+        fileData.setSessionId(sessionID);
         fileData.setStatusList(statusList);
         fileDataService.saveFileData(fileData);
         return List.of("csv", "db");

@@ -1,5 +1,6 @@
 package nl.codegorilla.sap.controller;
 
+import nl.codegorilla.sap.model.AuthenticationResponse;
 import nl.codegorilla.sap.model.LoginRequest;
 import nl.codegorilla.sap.service.TokenService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,10 +24,11 @@ public class AuthController {
     }
 
     @PostMapping("/token")
-    public String token(@RequestBody LoginRequest userLogin) {
+    public AuthenticationResponse token(@RequestBody LoginRequest userLogin) {
         System.out.println("Hello");
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLogin.username(), userLogin.password()));
-        return tokenService.generateToken(authenticate);
+        String token = tokenService.generateToken(authenticate);
+        return new AuthenticationResponse(token);
     }
 
 

@@ -1,18 +1,15 @@
 package nl.codegorilla.sap.model;
 
 import com.opencsv.bean.CsvBindByName;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.Embeddable;
 
-@Entity
+@Embeddable
 public class MailCourseStatus {
 
     @CsvBindByName
-    @Id
     private String email;
 
     @CsvBindByName
-
     private String course;
 
     @CsvBindByName

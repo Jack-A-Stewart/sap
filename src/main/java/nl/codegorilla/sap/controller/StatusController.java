@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping()
 public class StatusController {
 
+    public String sessionID;
     private final CourseStatusService courseStatusService;
 
     private final FileService fileService;
@@ -46,12 +47,13 @@ public class StatusController {
     @PostMapping("/upload")
     public ResponseEntity<List<String>> upload(@RequestParam("file") MultipartFile file, HttpSession session) {
 
-        return ResponseEntity.ok().body(fileService.processInput(file, session));
+        sessionID = session.getId();
+        return ResponseEntity.ok().body(fileService.processInput(file, sessionID));
     }
 
     @GetMapping("/download/{type}")
     public ResponseEntity<ByteArrayResource> download(@PathVariable("type") String type, HttpSession session) {
-        String path = fileService.processOutput(type, session.getId());
+        String path = fileService.processOutput(type, sessionID);
         return fileService.createResponse(path);
     }
 

@@ -14,7 +14,7 @@ public class FileData {
 
     private String sessionId;
 
-    @OneToMany
+    @ElementCollection
     private List<MailCourseStatus> statusList;
 
     public FileData(long id, String sessionId, List<MailCourseStatus> statusList) {
