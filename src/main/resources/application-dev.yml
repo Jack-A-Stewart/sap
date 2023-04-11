@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: admin
-    password: admin
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -10,10 +10,13 @@ spring:
     hibernate:
       ddl-auto: update
 
+logging:
+  level:
+    org.springframework.security: trace
 
-rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem
+#rsa:
+#  private-key: classpath:certs/private.pem
+#  public-key: classpath:certs/public.pem
 
 
 

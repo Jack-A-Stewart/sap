@@ -1,4 +1,4 @@
-package nl.codegorilla.sap.model;
+package nl.codegorilla.sap.model.authentication;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
