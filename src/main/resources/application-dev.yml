@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: admin
-    password: admin
+    url: jdbc:postgresql://containers-us-west-203:railway:app:5594/railway
+    username: postgres
+    password: qPpR77NjSX8QuyiDqqad
     driver-class-name: org.postgresql.Driver
   jpa:
     properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
