@@ -18,14 +18,17 @@ public class FileDataService {
         fileDataRepository.save(fileData);
     }
 
+    public void deleteFileDataByUserEmail(String userEmail) {
+        fileDataRepository.deleteByUserEmail(userEmail);
+    }
+
     @Transactional
     public void deleteFileData(Long id) {
         fileDataRepository.deleteById(id);
     }
 
-    public FileData findFileDataBySessionId(String sessionId) {
-        return fileDataRepository.findFileDataBySessionId(sessionId);
+    public FileData findFileDataByUserEmail(String userEmail) {
+        return fileDataRepository.findFileDataByUserEmail(userEmail);
     }
-
 
 }

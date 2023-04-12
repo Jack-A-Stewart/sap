@@ -32,7 +32,7 @@ public class FileService {
     }
 
 
-    public List<String> processInput(MultipartFile file, String sessionID) {
+    public List<String> processInput(MultipartFile file, String userEmail) {
         String filename = file.getOriginalFilename();
         String type = FilenameUtils.getExtension(filename);
 
@@ -49,14 +49,15 @@ public class FileService {
             statusList.add(courseStatusService.addStatus(mailCourseStatus));
         }
         FileData fileData = new FileData();
-        fileData.setSessionId(sessionID);
+        fileData.setUserEmail(userEmail);
         fileData.setStatusList(statusList);
+
         fileDataService.saveFileData(fileData);
         return List.of("csv", "db");
     }
 
-    public String processOutput(String type, String sessionId) {
-        FileData data = fileDataService.findFileDataBySessionId(sessionId);
+    public String processOutput(String type, String userEmail) {
+        FileData data = fileDataService.findFileDataByUserEmail(userEmail);
         List<MailCourseStatus> statusList = data.getStatusList();
 
         FileHandlerFactory fileHandlerFactory = new FileHandlerFactory();
@@ -66,7 +67,7 @@ public class FileService {
     }
 
 
-    public ResponseEntity<ByteArrayResource> createResponse(String filePath) {
+    public ResponseEntity<ByteArrayResource> createResponse(String filePath, String userEmail) {
         Path path = Paths.get(filePath);
         String type = "";
 
@@ -93,6 +94,7 @@ public class FileService {
         } finally {
             try {
                 Files.delete(path);
+                fileDataService.deleteFileDataByUserEmail(userEmail);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }

@@ -12,19 +12,22 @@ public class FileData {
     @Column(nullable = false, updatable = false, name = "id")
     private long id;
 
-    private String sessionId;
+
+    // change sessionID to something we can identify users with
+//    private String sessionId;
+    private String userEmail;
+
 
     @ElementCollection
     private List<MailCourseStatus> statusList;
 
-    public FileData(long id, String sessionId, List<MailCourseStatus> statusList) {
-        this.id = id;
-        this.sessionId = sessionId;
-        this.statusList = statusList;
+    public FileData() {
     }
 
-    public FileData() {
-
+    public FileData(long id, String userEmail, List<MailCourseStatus> statusList) {
+        this.id = id;
+        this.userEmail = userEmail;
+        this.statusList = statusList;
     }
 
     public long getId() {
@@ -35,12 +38,12 @@ public class FileData {
         this.id = id;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public List<MailCourseStatus> getStatusList() {
@@ -50,4 +53,6 @@ public class FileData {
     public void setStatusList(List<MailCourseStatus> statusList) {
         this.statusList = statusList;
     }
+
+
 }
