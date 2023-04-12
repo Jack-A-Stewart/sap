@@ -10,24 +10,20 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
 @RequiredArgsConstructor
+@CrossOrigin
 public class AuthenticationController {
 
     private final AuthenticationService service;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        System.out.println(request.getEmail());
-        System.out.println(request.getPassword());
         return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        System.out.println(request.getEmail());
-        System.out.println(request.getPassword());
-
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request
+    ) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 

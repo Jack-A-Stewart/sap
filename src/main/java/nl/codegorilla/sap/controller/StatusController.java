@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin()
+@CrossOrigin
 @RequestMapping()
 public class StatusController {
 
@@ -26,7 +26,7 @@ public class StatusController {
     private final FileService fileService;
 
 
-//    @Autowired
+    //    @Autowired
     public StatusController(CourseStatusService courseStatusService, FileService fileService) {
         this.courseStatusService = courseStatusService;
         this.fileService = fileService;
